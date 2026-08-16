@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra Harvest Foods - Interactive Organizational Structure</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            primary: '#2196F3',   /* Main Blue */
+                            light: '#90CAF9',     /* Accent Light Blue */
+                            soft: '#E3F2FD',      /* Subtle Tint */
+                            darkBg: '#0B1320',    /* Deep Dark Mode Background */
+                            darkCard: '#132035',  /* Dark Mode Card */
+                            darkBorder: '#1E3252',/* Dark Mode Border */
+                            lightBg: '#F4F8FC',   /* Light Mode Background */
+                            lightCard: '#FFFFFF', /* Light Mode Card */
+                            lightBorder: '#BBDEFB'/* Light Mode Border */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for inside cards and body */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #2196F3;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #90CAF9;
+        }
+        html:not(.dark) ::-webkit-scrollbar-thumb {
+            background: #90CAF9;
+            border-radius: 4px;
+        }
+        html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+            background: #2196F3;
+        }
+
+        /* Card Scrollable Container inner shadows */
+        .card-scroll-area {
+            scrollbar-width: thin;
+            scrollbar-color: #2196F3 transparent;
+        }
+
+        /* 3D Card Flip Mechanics */
+        .perspective-1000 {
+            perspective: 1200px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Hover flip active class applied when hover mode enabled */
+        .hover-flip-active:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Background grid overlay using Palette */
+        .dark .bg-grid-pattern {
+            background-image: radial-gradient(rgba(33, 150, 243, 0.15) 1.2px, transparent 1.2px);
+            background-size: 28px 28px;
+        }
+        html:not(.dark) .bg-grid-pattern {
+            background-image: radial-gradient(rgba(33, 150, 243, 0.2) 1.2px, transparent 1.2px);
+            background-size: 28px 28px;
+        }
+
+        /* Hierarchy Connector Lines */
+        .tree-line-v {
+            width: 2px;
+            background: linear-gradient(180deg, #2196F3 0%, #90CAF9 100%);
+        }
+        .tree-line-h {
+            height: 2px;
+            background: linear-gradient(90deg, #2196F3 0%, #90CAF9 50%, #2196F3 100%);
+        }
+
+        /* Dynamic SVG line layer for org connections */
+        #svgConnectors {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Glowing pulses */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(33, 150, 243, 0.25); border-color: rgba(33, 150, 243, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(144, 202, 249, 0.5); border-color: rgba(144, 202, 249, 0.9); }
+        }
+        .card-pulse {
+            animation: pulseGlow 3.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-darkBg text-slate-100 font-sans min-h-screen bg-grid-pattern antialiased selection:bg-blue-500 selection:text-white transition-colors duration-300 dark:bg-brand-darkBg dark:text-slate-100 body-light-override">
+
+    <!-- Header & Navigation Toolbar -->
+    <header class="sticky top-0 z-50 bg-brand-darkCard/90 dark:bg-brand-darkCard/90 border-b border-brand-darkBorder dark:border-brand-darkBorder backdrop-blur-md shadow-lg transition-colors duration-300 header-theme">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Company Brand Logo + Title -->
+            <div class="flex items-center gap-3 shrink-0">
+                <!-- SVG Brand Logo using Palette #2196F3 & #90CAF9 -->
+                <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#2196F3] via-[#64B5F6] to-[#90CAF9] flex items-center justify-center text-white shadow-lg shadow-[#2196F3]/30 ring-2 ring-[#E3F2FD]/30 p-2 shrink-0">
+                    <svg viewBox="0 0 100 100" class="w-full h-full fill-current text-white drop-shadow">
+                        <!-- Globe & Harvest Stylized Icon -->
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="6" opacity="0.4"/>
+                        <path d="M 50 15 Q 65 35 65 50 Q 65 65 50 85 Q 35 65 35 50 Q 35 35 50 15 Z" fill="currentColor" />
+                        <path d="M 20 50 Q 35 35 50 35 Q 65 35 80 50 Q 65 65 50 65 Q 35 65 20 50 Z" fill="#E3F2FD" opacity="0.8"/>
+                        <circle cx="50" cy="50" r="10" fill="#2196F3"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-black text-xl tracking-tight text-white font-mono brand-title-text">TERRA HARVEST FOODS</h1>
+                        <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-[#2196F3]/20 text-[#90CAF9] border border-[#2196F3]/40 rounded-md">ORG v3.2</span>
+                    </div>
+                    <p class="text-xs text-[#90CAF9] font-mono sub-title-text">Global Food & Beverage Enterprise Chart</p>
+                </div>
+            </div>
+
+            <!-- Top Control Bar Buttons -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                
+                <!-- Light / Dark Mode Switcher Button -->
+                <button id="themeToggleBtn" class="px-3.5 py-2 text-xs font-mono bg-[#1E3252] hover:bg-[#2196F3]/20 text-[#90CAF9] border border-[#2196F3]/40 rounded-xl transition-all flex items-center gap-2 shadow" title="Toggle Theme Mode">
+                    <i class="fa-solid fa-moon text-amber-300" id="themeIcon"></i>
+                    <span id="themeLabel" class="hidden sm:inline font-bold">Dark Mode</span>
+                </button>
+
+                <!-- Trigger Switcher (Hover vs Click) -->
+                <button id="triggerModeBtn" class="px-3.5 py-2 text-xs font-mono bg-[#1E3252] hover:bg-[#2196F3]/20 text-[#90CAF9] border border-[#2196F3]/40 rounded-xl transition-all flex items-center gap-2 shadow" title="Toggle Card Flip Mode">
+                    <i class="fa-solid fa-hand-pointer text-[#90CAF9]" id="triggerIcon"></i>
+                    <span id="triggerLabel" class="hidden md:inline">Flip: Hover</span>
+                </button>
+
+                <!-- Global Flip All -->
+                <button id="flipAllBtn" class="px-3.5 py-2 text-xs font-mono bg-[#1E3252] hover:bg-[#2196F3]/20 text-slate-200 border border-[#2196F3]/40 rounded-xl transition-all flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="hidden md:inline">Flip All Cards</span>
+                </button>
+
+                <!-- View Mode Toggle (Tree Hierarchy vs Grid) -->
+                <button id="viewToggleBtn" class="px-3.5 py-2 text-xs font-mono bg-[#2196F3] hover:bg-[#1976D2] text-white border border-[#90CAF9]/50 rounded-xl transition-all flex items-center gap-2 shadow-md">
+                    <i class="fa-solid fa-sitemap" id="viewIcon"></i>
+                    <span id="viewLabel" class="hidden sm:inline font-bold">Hierarchy Chart</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        
+        <!-- Interactive Control Console -->
+        <div class="console-box bg-brand-darkCard border border-brand-darkBorder rounded-2xl p-4 mb-8 shadow-xl backdrop-blur-md transition-colors duration-300">
+            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                
+                <!-- Search bar -->
+                <div class="relative w-full lg:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[#90CAF9] text-sm"></i>
+                    <input type="text" id="searchInput" placeholder="Search member, title, or skills..." 
+                        class="search-box-input w-full pl-10 pr-10 py-2.5 text-sm bg-[#0B1320] border border-[#1E3252] rounded-xl focus:outline-none focus:border-[#2196F3] focus:ring-1 focus:ring-[#2196F3] text-slate-100 placeholder-slate-400 font-sans transition-all">
+                    <button id="clearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Division Filter Buttons -->
+                <div class="flex flex-wrap gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0" id="filterContainer">
+                    <button class="filter-btn active px-3 py-1.5 text-xs font-mono rounded-xl border border-[#2196F3] bg-[#2196F3]/20 text-[#90CAF9] font-bold transition-all" data-dept="all">
+                        <i class="fa-solid fa-globe mr-1"></i> All Roles
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="c-suite">
+                        <i class="fa-solid fa-crown text-amber-400 mr-1"></i> C-Suite
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="culinary">
+                        <i class="fa-solid fa-utensils text-teal-400 mr-1"></i> Culinary & R&D
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="operations">
+                        <i class="fa-solid fa-boxes-packing text-emerald-400 mr-1"></i> Ops & Supply
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="marketing">
+                        <i class="fa-solid fa-bullhorn text-purple-400 mr-1"></i> Marketing & Sales
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="quality">
+                        <i class="fa-solid fa-microscope text-amber-400 mr-1"></i> Quality & Insights
+                    </button>
+                </div>
+            </div>
+
+            <!-- Console telemetry strip -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-3 border-t border-[#1E3252] text-xs text-slate-400 font-mono console-subtext">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#2196F3] animate-pulse"></span>
+                    <span>Order: <strong class="text-[#90CAF9]">Highest Rank First</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                    <span>Active Roles: <strong class="text-emerald-400" id="countNodes">20</strong> Positions</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#90CAF9]"></span>
+                    <span>Card Flip: <strong class="text-[#90CAF9]" id="currentTriggerText">Cursor Hover</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    <span>Back Card: <strong class="text-amber-300">Team Logo + Meaning</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organizational Chart Tree Hierarchy Section -->
+        <div id="orgChartTree" class="space-y-12 relative">
+
+            <!-- Dynamic SVG Connection Lines Container -->
+            <svg id="svgConnectors"></svg>
+
+            <!-- TIER 1: EXECUTIVE C-SUITE (Highest Position First) -->
+            <section class="relative z-10" id="cSuiteSection">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2196F3]/20 border border-[#2196F3]/50 text-[#90CAF9] text-xs font-mono font-bold uppercase tracking-wider mb-2 shadow">
+                        <i class="fa-solid fa-crown text-amber-400"></i> Tier 01 &bull; Executive Command Board
+                    </div>
+                    <h2 class="text-2xl font-black text-white tracking-tight font-mono tier-title-text">GLOBAL HARVEST GROUP EXECUTIVE BOARD</h2>
+                    <p class="text-xs text-[#90CAF9] font-mono mt-0.5 tier-sub-text">Aligned on parallel rank tier 1 — Executive decision makers</p>
+                </div>
+
+                <!-- Parallel Horizontal Row for Tier 1 Executives -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 relative z-20" id="cSuiteContainer">
+                    <!-- Cards injected via JavaScript -->
+                </div>
+
+                <!-- Tree Connector Trunk -->
+                <div class="hidden lg:flex flex-col items-center mt-8 relative z-0">
+                    <div class="w-1 h-12 bg-gradient-to-b from-[#2196F3] via-[#64B5F6] to-[#90CAF9] rounded-full"></div>
+                    <div class="w-full max-w-6xl h-1 bg-[#2196F3] relative rounded-full">
+                        <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#2196F3] ring-4 ring-[#E3F2FD]/30 shadow-lg shadow-[#2196F3]"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TIER 2 & 3: DEPARTMENTAL DIVISIONS (Arranged in parallel rows) -->
+            <section class="relative z-10">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2196F3]/20 border border-[#2196F3]/50 text-[#90CAF9] text-xs font-mono font-bold uppercase tracking-wider mb-2 shadow">
+                        <i class="fa-solid fa-sitemap text-[#90CAF9]"></i> Tier 02 - 04 &bull; Parallel Divisional Columns
+                    </div>
+                    <h3 class="text-xl font-extrabold text-white font-mono tier-title-text">OPERATIONAL DIVISIONS & FIELD ROLES</h3>
+                    <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Connected hierarchical layout with scrollable detail cards</p>
+                </div>
+
+                <!-- Parallel Divisional Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 relative z-20" id="departmentsContainer">
+                    <!-- 4 main operational divisions populated via JS -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Alternative Grid View (Hidden by default) -->
+        <div id="orgChartGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative z-10">
+            <!-- Populated via JS -->
+        </div>
+
+        <!-- Empty Filter Result Message -->
+        <div id="emptyState" class="hidden text-center py-16 bg-brand-darkCard border border-brand-darkBorder rounded-2xl shadow-xl">
+            <i class="fa-solid fa-user-slash text-4xl text-[#90CAF9] mb-3"></i>
+            <h3 class="text-lg font-bold text-slate-200 font-mono">No matching roles found</h3>
+            <p class="text-xs text-slate-400 mt-1">Try refining your search keyword or clearing the division filter.</p>
+            <button id="resetSearchBtn" class="mt-4 px-4 py-2 text-xs font-mono font-bold bg-[#2196F3] hover:bg-[#1976D2] text-white rounded-xl transition-all shadow">
+                Reset All Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-[#1E3252] text-center text-xs text-slate-400 font-mono">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-code-branch text-[#2196F3]"></i>
+                <span class="text-slate-300">Terra Harvest Foods Framework &bull; Palette #2196F3 #90CAF9 #E3F2FD</span>
+            </div>
+            <p class="text-[#90CAF9]">Scroll inside card faces to read full responsibilities & position meanings</p>
+            <div class="text-slate-400">
+                Highest Rank First Alignment
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Organization Member Data - Ordered with Highest Executive Positions First (Rank #01 to #20)
+        const orgData = [
+            // ==================== TIER 1: C-SUITE (RANKS 1-5) ====================
+            {
+                id: 'exec-1',
+                rankOrder: 1,
+                rankTitle: 'Rank #01 • Chief Executive',
+                dept: 'c-suite',
+                deptName: 'Executive Command',
+                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
+                teamLogoIcon: 'fa-solid fa-crown',
+                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
+                teamName: 'Global Harvest C-Suite',
+                title: 'Chief Executive Officer (CEO)',
+                name: 'Elena Rostova',
+                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The CEO holds ultimate executive authority over the enterprise, establishing global food production vision, long-term sustainability frameworks, investor relations, and overall corporate growth.',
+                responsibilities: [
+                    'Defines overall global corporate vision & enterprise strategy.',
+                    'Directs international agricultural sourcing partnerships.',
+                    'Oversees all C-Suite officers and board governance.',
+                    'Drives sustainable food production initiatives worldwide.'
+                ],
+                skills: ['Global Strategy', 'Executive Leadership', 'M&A Governance', 'Sustainable Sourcing']
+            },
+            {
+                id: 'exec-2',
+                rankOrder: 2,
+                rankTitle: 'Rank #02 • Operations Command',
+                dept: 'c-suite',
+                deptName: 'Executive Command',
+                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
+                teamLogoIcon: 'fa-solid fa-gears',
+                teamLogoColor: 'text-[#2196F3] bg-[#2196F3]/20 border-[#2196F3]/40',
+                teamName: 'Global Harvest C-Suite',
+                title: 'Chief Operating Officer (COO)',
+                name: 'Marcus Vance',
+                avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The COO leads international operational execution, orchestrating worldwide processing facilities, cold-chain logistics networks, and daily manufacturing output.',
+                responsibilities: [
+                    'Manages day-to-day food processing & plant operations.',
+                    'Optimizes end-to-end global supply chain efficiency.',
+                    'Enforces operational safety protocols across facilities.',
+                    'Integrates automated logistics & inventory tracking.'
+                ],
+                skills: ['Supply Chain', 'Plant Operations', 'Cold-Chain Logistics', 'Process Automation']
+            },
+            {
+                id: 'exec-3',
+                rankOrder: 3,
+                rankTitle: 'Rank #03 • Culinary Command',
+                dept: 'c-suite',
+                deptName: 'Executive Command',
+                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
+                teamLogoIcon: 'fa-solid fa-utensils',
+                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
+                teamName: 'Global Harvest C-Suite',
+                title: 'Chief Culinary & R&D Officer (CCRO)',
+                name: 'Chef Jean-Luc Dubois',
+                avatar: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The CCRO bridges gastronomy with advanced food science, pioneering new commercial recipe formulations, nutritional integrity, and culinary innovations.',
+                responsibilities: [
+                    'Spearheads culinary design & regional flavor profiling.',
+                    'Leads scientific R&D for shelf-stability and nutrition.',
+                    'Standardizes sensory panel evaluation & testing.',
+                    'Pioneers next-generation organic food technologies.'
+                ],
+                skills: ['Culinary R&D', 'Recipe Testing', 'Nutritional Science', 'Menu Innovation']
+            },
+            {
+                id: 'exec-4',
+                rankOrder: 4,
+                rankTitle: 'Rank #04 • Financial Command',
+                dept: 'c-suite',
+                deptName: 'Executive Command',
+                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
+                teamLogoIcon: 'fa-solid fa-chart-pie',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Global Harvest C-Suite',
+                title: 'Chief Financial Officer (CFO)',
+                name: 'Sophia Patel',
+                avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The CFO directs capital allocation, financial risk management, international agricultural commodity hedging, and fiscal strategy.',
+                responsibilities: [
+                    'Oversees corporate financial strategy & risk mitigation.',
+                    'Manages commodity hedging and agricultural fiscal policy.',
+                    'Evaluates ROI for manufacturing plant expansions.',
+                    'Directs investor relations and financial reporting.'
+                ],
+                skills: ['Fiscal Strategy', 'Commodity Hedging', 'Capital Allocation', 'Financial Modeling']
+            },
+            {
+                id: 'exec-5',
+                rankOrder: 5,
+                rankTitle: 'Rank #05 • Strategy Command',
+                dept: 'c-suite',
+                deptName: 'Executive Command',
+                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
+                teamLogoIcon: 'fa-solid fa-earth-americas',
+                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
+                teamName: 'Global Harvest C-Suite',
+                title: 'Chief Strategy Officer (CSO)',
+                name: 'David Lindqvist',
+                avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The CSO evaluates global market growth opportunities, leads sustainability (ESG) policies, and establishes high-value retail partnerships.',
+                responsibilities: [
+                    'Identifies emerging global consumer & retail markets.',
+                    'Negotiates corporate M&A and strategic alliances.',
+                    'Establishes company-wide ESG & sustainability goals.',
+                    'Guides long-term brand portfolio diversification.'
+                ],
+                skills: ['Market Expansion', 'Strategic Alliances', 'ESG Leadership', 'Growth Planning']
+            },
+
+            // ==================== DIVISION 1: CULINARY & R&D ====================
+            {
+                id: 'cul-1',
+                rankOrder: 6,
+                rankTitle: 'Rank #06 • Division Leader',
+                dept: 'culinary',
+                deptName: 'Culinary Innovation & R&D',
+                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
+                teamLogoIcon: 'fa-solid fa-utensils',
+                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
+                teamName: 'Culinary Innovation Team',
+                title: 'Culinary Vice President',
+                name: 'Chef Amara Okafor',
+                avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Culinary VP transitions artisanal chef recipes into scalable industrial food formulas ready for commercial retail distribution.',
+                responsibilities: [
+                    'Formulates new retail product concept lines.',
+                    'Refines kitchen recipes for high-capacity manufacturing.',
+                    'Coordinates raw organic ingredient testing with R&D.'
+                ],
+                skills: ['Concept Formulation', 'Ingredient Sourcing', 'Sensory Lab', 'Culinary Design']
+            },
+            {
+                id: 'cul-2',
+                rankOrder: 7,
+                rankTitle: 'Rank #07 • Director Level',
+                dept: 'culinary',
+                deptName: 'Culinary Innovation & R&D',
+                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
+                teamLogoIcon: 'fa-solid fa-flask-vial',
+                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
+                teamName: 'Food Science & R&D Team',
+                title: 'R&D Director',
+                name: 'Dr. Hiroshi Tanaka',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The R&D Director oversees laboratory testing, bio-preservation, thermal processing, and long-term shelf-life stability.',
+                responsibilities: [
+                    'Maintains scientific integrity of product formulations.',
+                    'Oversees shelf-life stability & bio-preservation.',
+                    'Translates benchtop recipes into factory parameters.'
+                ],
+                skills: ['Food Science', 'Preservation', 'Process Design', 'R&D Governance']
+            },
+            {
+                id: 'cul-3',
+                rankOrder: 8,
+                rankTitle: 'Rank #08 • Lead Level',
+                dept: 'culinary',
+                deptName: 'Culinary Innovation & R&D',
+                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
+                teamLogoIcon: 'fa-solid fa-vial',
+                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
+                teamName: 'Food Science & R&D Team',
+                title: 'R&D Lead',
+                name: 'Carlos Mendez',
+                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The R&D Lead executes physical lab test batches, monitoring flavor retention, pH balance, and ingredient interactions.',
+                responsibilities: [
+                    'Executes benchtop prototype test batches.',
+                    'Maintains laboratory equipment & measurement standards.',
+                    'Logs raw material chemical & physical behavior.'
+                ],
+                skills: ['Benchtop Prototyping', 'Lab Testing', 'Data Logging', 'Sensory Analytics']
+            },
+            {
+                id: 'cul-4',
+                rankOrder: 9,
+                rankTitle: 'Rank #09 • Manager Level',
+                dept: 'culinary',
+                deptName: 'Culinary Innovation & R&D',
+                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
+                teamLogoIcon: 'fa-solid fa-map-location-dot',
+                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
+                teamName: 'Product Lifecycle Team',
+                title: 'Product Roadmap Manager',
+                name: 'Claire Sterling',
+                avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Roadmap Manager governs stage-gate timelines, coordinating product launches from laboratory prototypes to full grocery production.',
+                responsibilities: [
+                    'Coordinates stage-gate product launch workflows.',
+                    'Aligns R&D output with commercial sales calendars.',
+                    'Monitors timeline milestones from lab to retail store.'
+                ],
+                skills: ['Roadmapping', 'Agile Product Mgmt', 'Stage-Gate', 'Release Timing']
+            },
+
+            // ==================== DIVISION 2: OPERATIONS & SUPPLY CHAIN ====================
+            {
+                id: 'ops-1',
+                rankOrder: 10,
+                rankTitle: 'Rank #10 • Division Leader',
+                dept: 'operations',
+                deptName: 'Ops & Supply Chain',
+                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
+                teamLogoIcon: 'fa-solid fa-truck-fast',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Global Logistics Operations',
+                title: 'Logistics Control Manager',
+                name: 'Vikram Singh',
+                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Logistics Control Manager supervises global distribution hubs, fleet telemetry, cold-chain integrity, and international customs clearance.',
+                responsibilities: [
+                    'Oversees global direct distribution networks.',
+                    'Manages warehouse throughput and fleet scheduling.',
+                    'Maintains real-time GPS cold-chain tracking.'
+                ],
+                skills: ['Global Logistics', 'TMS/ERP Systems', 'Fleet Control', 'Customs Rules']
+            },
+            {
+                id: 'ops-2',
+                rankOrder: 11,
+                rankTitle: 'Rank #11 • Manager Level',
+                dept: 'operations',
+                deptName: 'Ops & Supply Chain',
+                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
+                teamLogoIcon: 'fa-solid fa-wheat-awn',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Agricultural Procurement',
+                title: 'Sourcing Manager',
+                name: 'Rachel Adams',
+                avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Sourcing Manager negotiates contracts with organic agricultural growers worldwide, guaranteeing steady ingredient supplies.',
+                responsibilities: [
+                    'Negotiates supplier contracts with farm networks.',
+                    'Enforces fair-trade and organic sourcing standards.',
+                    'Mitigates raw harvest supply chain disruptions.'
+                ],
+                skills: ['Procurement', 'Vendor Negotiation', 'Supply Auditing', 'Raw Ingredients']
+            },
+            {
+                id: 'ops-3',
+                rankOrder: 12,
+                rankTitle: 'Rank #12 • Supervisor Level',
+                dept: 'operations',
+                deptName: 'Ops & Supply Chain',
+                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
+                teamLogoIcon: 'fa-solid fa-clipboard-check',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Plant Procurement Division',
+                title: 'Procurement Supervisor',
+                name: 'Gaston Mercier',
+                avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Procurement Supervisor coordinates daily plant purchase orders, raw stock verification, and local supplier deliveries.',
+                responsibilities: [
+                    'Supervises daily raw material purchase orders.',
+                    'Verifies incoming raw ingredient quality certificates.',
+                    'Coordinates localized processing plant inventory.'
+                ],
+                skills: ['Inventory Control', 'Purchase Orders', 'Quality Control', 'SAP/ERP']
+            },
+            {
+                id: 'ops-4',
+                rankOrder: 13,
+                rankTitle: 'Rank #13 • Coordinator Level',
+                dept: 'operations',
+                deptName: 'Ops & Supply Chain',
+                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
+                teamLogoIcon: 'fa-solid fa-boxes-stacked',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Cold-Chain Warehouse Team',
+                title: 'Supply Logistics Coordinator',
+                name: 'Hannah Abbott',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Logistics Coordinator manages temperature-controlled storage, freight dispatch schedules, and inventory tracking.',
+                responsibilities: [
+                    'Monitors refrigerated freight temperature sensors.',
+                    'Schedules inbound and outbound delivery trucks.',
+                    'Optimizes warehouse storage rack layout.'
+                ],
+                skills: ['Cold-Chain Ops', 'Warehouse Management', 'Route Planning']
+            },
+            {
+                id: 'ops-5',
+                rankOrder: 14,
+                rankTitle: 'Rank #14 • Plant Specialist',
+                dept: 'operations',
+                deptName: 'Ops & Supply Chain',
+                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
+                teamLogoIcon: 'fa-solid fa-industry',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Plant Field Operations',
+                title: 'Plant Operations Technician',
+                name: 'David K. Miller',
+                avatar: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Operations Technician manages automated processing machinery, floor sanitation schedules, and batch record entries.',
+                responsibilities: [
+                    'Executes floor processing & packaging protocols.',
+                    'Maintains production machinery calibration.',
+                    'Logs inventory movements into central terminals.'
+                ],
+                skills: ['Floor Ops', 'Machinery Care', 'ERP Data Entry', 'Safety Logs']
+            },
+
+            // ==================== DIVISION 3: MARKETING & SALES ====================
+            {
+                id: 'mkt-1',
+                rankOrder: 15,
+                rankTitle: 'Rank #15 • Division Leader',
+                dept: 'marketing',
+                deptName: 'Marketing & Sales',
+                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
+                teamLogoIcon: 'fa-solid fa-bullhorn',
+                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
+                teamName: 'Global Brand & Growth',
+                title: 'Commercial Vice President',
+                name: 'Samantha Wright',
+                avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Commercial VP leads global branding, Direct-to-Consumer (D2C) channels, and international retail distribution expansion.',
+                responsibilities: [
+                    'Drives global brand identity & marketing campaigns.',
+                    'Expands Direct-to-Consumer (D2C) & retail pipelines.',
+                    'Fosters international supermarket chain partnerships.'
+                ],
+                skills: ['Global Branding', 'D2C Strategy', 'Retail Sales', 'Trade Growth']
+            },
+            {
+                id: 'mkt-2',
+                rankOrder: 16,
+                rankTitle: 'Rank #16 • Director Level',
+                dept: 'marketing',
+                deptName: 'Marketing & Sales',
+                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
+                teamLogoIcon: 'fa-solid fa-award',
+                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
+                teamName: 'Brand Integrity Team',
+                title: 'Brand Quality Director',
+                name: 'Arthur Pendelton',
+                avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Brand Quality Director ensures consumer-facing product consistency, commercial claim compliance, and brand reputation protection.',
+                responsibilities: [
+                    'Protects brand reputation across public channels.',
+                    'Ensures marketing claims align with product reality.',
+                    'Coordinates major international food industry expos.'
+                ],
+                skills: ['Brand Protection', 'Public Relations', 'Customer Experience']
+            },
+            {
+                id: 'mkt-3',
+                rankOrder: 17,
+                rankTitle: 'Rank #17 • Senior Analyst',
+                dept: 'marketing',
+                deptName: 'Marketing & Sales',
+                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
+                teamLogoIcon: 'fa-solid fa-chart-line',
+                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
+                teamName: 'Market Insights Team',
+                title: 'Senior Marketing Analyst',
+                name: 'Liam Chen',
+                avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Senior Marketing Analyst monitors retail POS sales trends, campaign performance metrics, and pricing strategy optimization.',
+                responsibilities: [
+                    'Analyzes retail point-of-sale sales metrics.',
+                    'Tracks digital campaign ROI & customer acquisition.',
+                    'Evaluates competitive product pricing in real time.'
+                ],
+                skills: ['Data Analytics', 'POS Analytics', 'Pricing Models', 'SQL / Tableau']
+            },
+            {
+                id: 'mkt-4',
+                rankOrder: 18,
+                rankTitle: 'Rank #18 • Specialist Level',
+                dept: 'marketing',
+                deptName: 'Marketing & Sales',
+                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
+                teamLogoIcon: 'fa-solid fa-handshake',
+                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
+                teamName: 'Retail Account Expansion',
+                title: 'Business Development Specialist',
+                name: 'Nadia Benali',
+                avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The Business Development Specialist acquires wholesale supermarket accounts and secures premium store placement.',
+                responsibilities: [
+                    'Secures new grocery chain and distributor contracts.',
+                    'Manages regional trade promotion budgets.',
+                    'Supports key retail account executive leads.'
+                ],
+                skills: ['B2B Sales', 'Distribution Deals', 'Account Management']
+            },
+
+            // ==================== DIVISION 4: QUALITY & INSIGHTS ====================
+            {
+                id: 'qa-1',
+                rankOrder: 19,
+                rankTitle: 'Rank #19 • Chief Quality Officer',
+                dept: 'quality',
+                deptName: 'Quality & Insights',
+                deptColor: 'border-amber-500 text-amber-400 bg-amber-500/10',
+                teamLogoIcon: 'fa-solid fa-shield-halved',
+                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
+                teamName: 'Global Quality & Safety',
+                title: 'Chief Quality Officer',
+                name: 'Dr. Evelyn Reed',
+                avatar: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The CQO governs global food safety standards, FDA/EFSA regulatory compliance, allergen safety, and HACCP facility certifications.',
+                responsibilities: [
+                    'Establishes enterprise food safety standards.',
+                    'Maintains FDA, EFSA, & HACCP regulatory compliance.',
+                    'Directs plant sanitation audits & contamination prevention.'
+                ],
+                skills: ['HACCP Governance', 'FDA/EFSA Regs', 'Safety Protocol', 'Audit Mgmt']
+            },
+            {
+                id: 'qa-2',
+                rankOrder: 20,
+                rankTitle: 'Rank #20 • VP Insights',
+                dept: 'quality',
+                deptName: 'Quality & Insights',
+                deptColor: 'border-amber-500 text-amber-400 bg-amber-500/10',
+                teamLogoIcon: 'fa-solid fa-magnifying-glass-chart',
+                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
+                teamName: 'Consumer Intelligence Team',
+                title: 'VP Consumer Insights',
+                name: 'Jonathan Sterling',
+                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300',
+                positionMeaning: 'The VP of Consumer Insights analyzes consumer sensory feedback, emerging dietary trends, and taste panel evaluation data.',
+                responsibilities: [
+                    'Gathers global consumer sensory taste metrics.',
+                    'Translates consumer feedback into product enhancements.',
+                    'Publishes quarterly Market & Dietary Trend Reports.'
+                ],
+                skills: ['Consumer Research', 'Focus Groups', 'Trend Forecasting', 'Surveys']
+            }
+        ];
+
+        // State Management
+        let isDarkMode = true;
+        let isHoverMode = true; // True = Hover flip, False = Click flip
+        let activeDepartment = 'all';
+        let isAllFlipped = false;
+        let isTreeView = true;
+
+        // Function to build Card HTML with Scrollable Content Areas
+        function createCardHTML(item) {
+            const isExec = item.dept === 'c-suite';
+            
+            return `
+            <div class="card-node perspective-1000 h-[380px] w-full ${isHoverMode ? 'hover-flip-active' : ''}" 
+                 data-id="${item.id}" 
+                 data-dept="${item.dept}" 
+                 data-rank="${item.rankOrder}"
+                 data-search="${(item.name + ' ' + item.title + ' ' + item.deptName + ' ' + item.teamName + ' ' + item.skills.join(' ')).toLowerCase()}">
+                
+                <div class="card-inner relative w-full h-full transform-style-3d cursor-pointer rounded-2xl">
+                    
+                    <!-- ================= CARD FRONT (PHOTO + NAME + POSITION + RANK + SCROLLABLE SKILLS) ================= -->
+                    <div class="card-front absolute inset-0 bg-brand-darkCard dark:bg-brand-darkCard border border-brand-darkBorder dark:border-brand-darkBorder rounded-2xl p-4 flex flex-col justify-between backface-hidden shadow-xl card-glow ${isExec ? 'card-pulse border-[#2196F3]' : ''}">
+                        
+                        <!-- Top Header: Rank & Department Badge -->
+                        <div>
+                            <div class="flex items-center justify-between gap-1 mb-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${item.deptColor || 'border-slate-700 text-slate-300 bg-slate-800'} border shadow-sm">
+                                    ${item.deptName}
+                                </span>
+                                <span class="text-[10px] font-mono font-bold text-[#2196F3] bg-[#2196F3]/15 border border-[#2196F3]/40 px-2 py-0.5 rounded shadow-sm">
+                                    #${item.rankOrder < 10 ? '0' + item.rankOrder : item.rankOrder} RANK
+                                </span>
+                            </div>
+
+                            <!-- Member Avatar Picture + Main Name & Position -->
+                            <div class="flex items-center gap-3 my-2 bg-[#0B1320]/60 p-2.5 rounded-xl border border-[#1E3252]/60 card-sub-bg">
+                                <div class="relative shrink-0">
+                                    <img src="${item.avatar}" alt="${item.name}" 
+                                        onerror="this.src='https://placehold.co/150x150/132035/90CAF9?text=${encodeURIComponent(item.name.charAt(0))}'"
+                                        class="w-14 h-14 rounded-xl object-cover border-2 ${isExec ? 'border-[#2196F3] shadow-md shadow-[#2196F3]/30' : 'border-[#90CAF9]/40'}">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-brand-darkCard flex items-center justify-center text-[9px] text-slate-900 font-bold" title="Verified Member">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="font-extrabold text-white text-sm leading-snug truncate card-text-main" title="${item.name}">${item.name}</h3>
+                                    <p class="text-xs font-bold text-[#90CAF9] mt-0.5 truncate card-text-sub" title="${item.title}">${item.title}</p>
+                                    <p class="text-[10px] text-slate-400 font-mono mt-0.5 card-text-muted">${item.rankTitle}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Skills & Competencies Area -->
+                        <div class="my-1 flex-1 overflow-hidden flex flex-col">
+                            <div class="text-[10px] font-mono text-[#90CAF9] uppercase tracking-wider mb-1 flex items-center gap-1 font-semibold">
+                                <i class="fa-solid fa-layer-group text-[9px] text-[#2196F3]"></i> Focus Areas & Skills:
+                            </div>
+                            <!-- Internal Scrollable Container for Text Clarity -->
+                            <div class="card-scroll-area overflow-y-auto max-h-[85px] pr-1 space-y-1">
+                                <div class="flex flex-wrap gap-1.5">
+                                    ${item.skills.map(s => `<span class="px-2 py-0.5 text-[10px] font-mono bg-[#0B1320] text-slate-200 rounded border border-[#1E3252] shadow-sm tag-style">${s}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Front Card Footer Indicator -->
+                        <div class="pt-2 border-t border-[#1E3252] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                            <span class="text-[10px] text-[#90CAF9]">ID: ${item.id}</span>
+                            <span class="text-[#2196F3] text-[10px] flex items-center gap-1 font-bold">
+                                <i class="fa-solid fa-rotate text-[10px]"></i> 
+                                <span class="trigger-hint-text">${isHoverMode ? 'Pass cursor to flip' : 'Click card to flip'}</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- ================= CARD BACK (TEAM LOGO + POSITION MEANING + SCROLLABLE DIRECTIVES) ================= -->
+                    <div class="card-back absolute inset-0 bg-[#0B1320] border-2 border-[#2196F3] rounded-2xl p-4 flex flex-col justify-between backface-hidden rotate-y-180 shadow-2xl overflow-hidden">
+                        
+                        <!-- Header Back: Team Logo replaces the member picture -->
+                        <div>
+                            <div class="flex items-center gap-3 border-b border-[#1E3252] pb-2.5 mb-2.5">
+                                <!-- Team Logo Icon Circle -->
+                                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-base border ${item.teamLogoColor} shrink-0 shadow-md">
+                                    <i class="${item.teamLogoIcon}"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <span class="text-[9px] font-mono text-[#2196F3] uppercase tracking-wider font-extrabold">Team Logo & Division</span>
+                                    <h4 class="font-extrabold text-white text-xs truncate" title="${item.teamName}">${item.teamName}</h4>
+                                    <p class="text-[10px] text-[#90CAF9] font-medium truncate">${item.title}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Information Content for Position Meaning -->
+                        <div class="card-scroll-area overflow-y-auto max-h-[200px] pr-1 space-y-2.5 my-1">
+                            
+                            <!-- Position Meaning Section -->
+                            <div class="bg-[#132035] p-2.5 rounded-xl border border-[#1E3252] shadow-inner">
+                                <div class="text-[10px] font-mono text-amber-300 uppercase tracking-wider font-bold flex items-center gap-1 mb-1">
+                                    <i class="fa-solid fa-circle-info text-[#2196F3]"></i> Position Meaning in Enterprise:
+                                </div>
+                                <p class="text-xs text-slate-200 leading-relaxed font-sans font-normal">
+                                    ${item.positionMeaning}
+                                </p>
+                            </div>
+
+                            <!-- Key Responsibilities Section -->
+                            <div class="bg-[#132035]/60 p-2 rounded-xl border border-[#1E3252]">
+                                <div class="text-[10px] font-mono text-[#90CAF9] uppercase tracking-wider font-bold mb-1 flex items-center gap-1">
+                                    <i class="fa-solid fa-list-check text-emerald-400 text-[10px]"></i> Operational Directives:
+                                </div>
+                                <ul class="space-y-1 text-[11px] text-slate-300 font-sans">
+                                    ${item.responsibilities.map(r => `
+                                        <li class="flex items-start gap-1.5 leading-tight">
+                                            <i class="fa-solid fa-caret-right text-[#2196F3] text-[10px] mt-0.5 shrink-0"></i>
+                                            <span>${r}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Back Card Footer -->
+                        <div class="pt-2 border-t border-[#1E3252] flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-slate-300 font-bold">${item.name}</span>
+                            <span class="px-2 py-0.5 rounded bg-[#2196F3]/20 text-[#90CAF9] border border-[#2196F3]/40 font-bold">
+                                Rank #${item.rankOrder}
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            `;
+        }
+
+        function renderTreeLayout() {
+            const cSuiteContainer = document.getElementById('cSuiteContainer');
+            const departmentsContainer = document.getElementById('departmentsContainer');
+
+            // C-Suite Items aligned in parallel horizontal row
+            const cSuiteItems = orgData
+                .filter(d => d.dept === 'c-suite')
+                .sort((a, b) => a.rankOrder - b.rankOrder);
+            
+            cSuiteContainer.innerHTML = cSuiteItems.map(item => createCardHTML(item)).join('');
+
+            // Divisional Headers
+            const deptKeys = [
+                { key: 'culinary', title: 'CULINARY & R&D', header: 'Product VPs & Science Directors', color: 'border-teal-500/40 bg-teal-950/40 text-teal-300' },
+                { key: 'operations', title: 'OPERATIONS & SUPPLY', header: 'Plant VPs & Logistics Managers', color: 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300' },
+                { key: 'marketing', title: 'MARKETING & SALES', header: 'Commercial VPs & Sales Leads', color: 'border-purple-500/40 bg-purple-950/40 text-purple-300' },
+                { key: 'quality', title: 'QUALITY & INSIGHTS', header: 'Quality Officers & Trend Leads', color: 'border-amber-500/40 bg-amber-950/40 text-amber-300' }
+            ];
+
+            departmentsContainer.innerHTML = deptKeys.map(dept => {
+                const deptItems = orgData
+                    .filter(d => d.dept === dept.key)
+                    .sort((a, b) => a.rankOrder - b.rankOrder);
+
+                return `
+                    <div class="dept-column space-y-4 bg-brand-darkCard/80 p-4 rounded-2xl border border-brand-darkBorder backdrop-blur-sm transition-colors" data-dept="${dept.key}">
+                        <!-- Divisional Column Title -->
+                        <div class="p-3 rounded-xl border ${dept.color} text-center shadow">
+                            <h4 class="font-extrabold text-xs tracking-wider uppercase font-mono">${dept.title}</h4>
+                            <p class="text-[10px] italic opacity-90 mt-0.5">${dept.header}</p>
+                        </div>
+                        
+                        <!-- Cards Stacked in Parallel Hierarchy Lines -->
+                        <div class="space-y-4">
+                            ${deptItems.map(item => createCardHTML(item)).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            attachCardEventListeners();
+        }
+
+        function renderGridLayout() {
+            const gridContainer = document.getElementById('orgChartGrid');
+            const sortedAll = [...orgData].sort((a, b) => a.rankOrder - b.rankOrder);
+            gridContainer.innerHTML = sortedAll.map(item => createCardHTML(item)).join('');
+            attachCardEventListeners();
+        }
+
+        function attachCardEventListeners() {
+            document.querySelectorAll('.card-inner').forEach(cardInner => {
+                cardInner.addEventListener('click', function(e) {
+                    // Toggle flip on click
+                    this.classList.toggle('rotate-y-180');
+                });
+            });
+        }
+
+        function applyFilters() {
+            const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.card-node');
+            const deptColumns = document.querySelectorAll('.dept-column');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardDept = card.getAttribute('data-dept');
+                const cardSearch = card.getAttribute('data-search');
+
+                const matchesDept = (activeDepartment === 'all' || cardDept === activeDepartment);
+                const matchesSearch = !searchVal || cardSearch.includes(searchVal);
+
+                if (matchesDept && matchesSearch) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Adjust department column visibility
+            deptColumns.forEach(col => {
+                const colDept = col.getAttribute('data-dept');
+                const visibleCardsInCol = col.querySelectorAll('.card-node:not(.hidden)').length;
+                
+                if (activeDepartment !== 'all' && activeDepartment !== colDept && activeDepartment !== 'c-suite') {
+                    col.classList.add('hidden');
+                } else if (visibleCardsInCol === 0 && searchVal) {
+                    col.classList.add('hidden');
+                } else {
+                    col.classList.remove('hidden');
+                }
+            });
+
+            // C-Suite Section Visibility
+            const cSuiteSection = document.getElementById('cSuiteSection');
+            if (cSuiteSection) {
+                const visibleCSuiteCards = document.querySelectorAll('#cSuiteContainer .card-node:not(.hidden)').length;
+                if (activeDepartment !== 'all' && activeDepartment !== 'c-suite') {
+                    cSuiteSection.classList.add('hidden');
+                } else if (visibleCSuiteCards === 0 && searchVal) {
+                    cSuiteSection.classList.add('hidden');
+                } else {
+                    cSuiteSection.classList.remove('hidden');
+                }
+            }
+
+            // Toggle Empty State Box
+            const emptyState = document.getElementById('emptyState');
+            if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            document.getElementById('countNodes').textContent = visibleCount;
+            document.getElementById('clearSearch').classList.toggle('hidden', !searchVal);
+        }
+
+        function toggleLightDarkMode() {
+            isDarkMode = !isDarkMode;
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeLabel = document.getElementById('themeLabel');
+
+            if (isDarkMode) {
+                html.classList.add('dark');
+                themeIcon.className = 'fa-solid fa-moon text-amber-300';
+                themeLabel.textContent = 'Dark Mode';
+                applyThemeStylesDark();
+            } else {
+                html.classList.remove('dark');
+                themeIcon.className = 'fa-solid fa-sun text-amber-500';
+                themeLabel.textContent = 'Light Mode';
+                applyThemeStylesLight();
+            }
+        }
+
+        function applyThemeStylesDark() {
+            document.body.style.backgroundColor = '#0B1320';
+            document.body.style.color = '#F1F5F9';
+            
+            document.querySelectorAll('.card-front').forEach(el => {
+                el.style.backgroundColor = '#132035';
+                el.style.borderColor = '#1E3252';
+            });
+            document.querySelectorAll('.card-text-main').forEach(el => el.style.color = '#FFFFFF');
+            document.querySelectorAll('.card-sub-bg').forEach(el => {
+                el.style.backgroundColor = '#0B1320';
+                el.style.borderColor = '#1E3252';
+            });
+            document.querySelectorAll('.console-box').forEach(el => {
+                el.style.backgroundColor = '#132035';
+                el.style.borderColor = '#1E3252';
+            });
+            document.querySelectorAll('.search-box-input').forEach(el => {
+                el.style.backgroundColor = '#0B1320';
+                el.style.color = '#FFFFFF';
+            });
+        }
+
+        function applyThemeStylesLight() {
+            document.body.style.backgroundColor = '#F4F8FC';
+            document.body.style.color = '#0F172A';
+
+            document.querySelectorAll('.card-front').forEach(el => {
+                el.style.backgroundColor = '#FFFFFF';
+                el.style.borderColor = '#BBDEFB';
+            });
+            document.querySelectorAll('.card-text-main').forEach(el => el.style.color = '#0F172A');
+            document.querySelectorAll('.card-sub-bg').forEach(el => {
+                el.style.backgroundColor = '#E3F2FD';
+                el.style.borderColor = '#90CAF9';
+            });
+            document.querySelectorAll('.console-box').forEach(el => {
+                el.style.backgroundColor = '#FFFFFF';
+                el.style.borderColor = '#BBDEFB';
+            });
+            document.querySelectorAll('.search-box-input').forEach(el => {
+                el.style.backgroundColor = '#E3F2FD';
+                el.style.color = '#0F172A';
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTreeLayout();
+            renderGridLayout();
+
+            // Search input listener
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', applyFilters);
+
+            document.getElementById('clearSearch').addEventListener('click', () => {
+                searchInput.value = '';
+                applyFilters();
+            });
+
+            document.getElementById('resetSearchBtn').addEventListener('click', () => {
+                searchInput.value = '';
+                activeDepartment = 'all';
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active', 'border-[#2196F3]', 'bg-[#2196F3]/20', 'text-[#90CAF9]', 'font-bold');
+                    btn.classList.add('border-[#1E3252]', 'bg-[#0B1320]', 'text-slate-300');
+                    if (btn.getAttribute('data-dept') === 'all') {
+                        btn.classList.add('active', 'border-[#2196F3]', 'bg-[#2196F3]/20', 'text-[#90CAF9]', 'font-bold');
+                    }
+                });
+                applyFilters();
+            });
+
+            // Theme Switcher Button Event
+            document.getElementById('themeToggleBtn').addEventListener('click', toggleLightDarkMode);
+
+            // Filter Tabs Event
+            document.getElementById('filterContainer').addEventListener('click', (e) => {
+                const btn = e.target.closest('.filter-btn');
+                if (!btn) return;
+
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'border-[#2196F3]', 'bg-[#2196F3]/20', 'text-[#90CAF9]', 'font-bold');
+                    b.classList.add('border-[#1E3252]', 'bg-[#0B1320]', 'text-slate-300');
+                });
+
+                btn.classList.add('active', 'border-[#2196F3]', 'bg-[#2196F3]/20', 'text-[#90CAF9]', 'font-bold');
+                btn.classList.remove('border-[#1E3252]', 'bg-[#0B1320]', 'text-slate-300');
+
+                activeDepartment = btn.getAttribute('data-dept');
+                applyFilters();
+            });
+
+            // Toggle Card Flip Mode (Hover vs Click)
+            document.getElementById('triggerModeBtn').addEventListener('click', () => {
+                isHoverMode = !isHoverMode;
+                const triggerIcon = document.getElementById('triggerIcon');
+                const triggerLabel = document.getElementById('triggerLabel');
+                const currentTriggerText = document.getElementById('currentTriggerText');
+
+                if (isHoverMode) {
+                    triggerIcon.className = 'fa-solid fa-hand-pointer text-[#90CAF9]';
+                    triggerLabel.textContent = 'Flip: Hover';
+                    currentTriggerText.textContent = 'Cursor Hover';
+                    document.querySelectorAll('.card-node').forEach(node => {
+                        node.classList.add('hover-flip-active');
+                    });
+                    document.querySelectorAll('.trigger-hint-text').forEach(el => {
+                        el.textContent = 'Pass cursor to flip';
+                    });
+                } else {
+                    triggerIcon.className = 'fa-solid fa-computer-mouse text-amber-400';
+                    triggerLabel.textContent = 'Flip: Click';
+                    currentTriggerText.textContent = 'Click Only';
+                    document.querySelectorAll('.card-node').forEach(node => {
+                        node.classList.remove('hover-flip-active');
+                    });
+                    document.querySelectorAll('.trigger-hint-text').forEach(el => {
+                        el.textContent = 'Click card to flip';
+                    });
+                }
+            });
+
+            // Flip All Cards Button
+            document.getElementById('flipAllBtn').addEventListener('click', () => {
+                isAllFlipped = !isAllFlipped;
+                document.querySelectorAll('.card-inner').forEach(card => {
+                    if (isAllFlipped) {
+                        card.classList.add('rotate-y-180');
+                    } else {
+                        card.classList.remove('rotate-y-180');
+                    }
+                });
+            });
+
+            // Hierarchy View vs Grid View Toggle
+            document.getElementById('viewToggleBtn').addEventListener('click', () => {
+                isTreeView = !isTreeView;
+                const treeView = document.getElementById('orgChartTree');
+                const gridView = document.getElementById('orgChartGrid');
+                const viewIcon = document.getElementById('viewIcon');
+                const viewLabel = document.getElementById('viewLabel');
+
+                if (isTreeView) {
+                    treeView.classList.remove('hidden');
+                    gridView.classList.add('hidden');
+                    viewIcon.className = 'fa-solid fa-sitemap';
+                    viewLabel.textContent = 'Hierarchy Chart';
+                } else {
+                    treeView.classList.add('hidden');
+                    gridView.classList.remove('hidden');
+                    viewIcon.className = 'fa-solid fa-grip';
+                    viewLabel.textContent = 'Grid View';
+                }
+                applyFilters();
+            });
+        });
+    </script>
+</body>
+</html>
