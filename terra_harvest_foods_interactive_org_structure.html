@@ -245,6 +245,16 @@
             border-radius: 9999px;
             flex-shrink: 0;
         }
+
+        /* Food & Beverage company chart: gold glowing connectors for executive branches */
+        .diagram-connector-food {
+            stroke: url(#connGradFood);
+            filter: url(#connGlowFood);
+        }
+        .diagram-connector-gold {
+            stroke: url(#connGradGold);
+            filter: url(#connGlowFood);
+        }
     </style>
 </head>
 
@@ -431,6 +441,24 @@
             <div class="bg-brand-darkCard/60 border border-brand-darkBorder rounded-2xl p-8 relative overflow-x-auto shadow-xl backdrop-blur-sm transition-colors duration-300">
                 <div id="orgDiagramStage" class="relative mx-auto">
                     <!-- Nodes + connectors injected via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Food & Beverage Company Organizational Chart (Hidden by default) -->
+        <div id="orgChartFood" class="hidden relative z-10">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2196F3]/20 border border-[#2196F3]/50 text-[#90CAF9] text-xs font-mono font-bold uppercase tracking-wider mb-2 shadow">
+                    <i class="fa-solid fa-utensils text-amber-400"></i> Food &amp; Beverage Enterprise &bull; Executive Leadership Tree
+                </div>
+                <h3 class="text-xl font-extrabold text-white font-mono tier-title-text">TERRA HARVEST FOODS &mdash; EXECUTIVE LEADERSHIP TREE</h3>
+                <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Cascading reporting structure from the Executive Board down to every department &mdash; scroll sideways to view the full tree</p>
+            </div>
+
+            <!-- Scrollable canvas holding absolutely positioned nodes + SVG connectors -->
+            <div class="bg-brand-darkCard/60 border border-brand-darkBorder rounded-2xl p-8 relative overflow-x-auto shadow-xl backdrop-blur-sm transition-colors duration-300">
+                <div id="foodOrgStage" class="relative mx-auto">
+                    <!-- Food company nodes + connectors injected via JavaScript -->
                 </div>
             </div>
         </div>
@@ -904,8 +932,8 @@
         let isHoverMode = true; // True = Hover flip, False = Click flip
         let activeDepartment = 'all';
         let isAllFlipped = false;
-        let viewMode = 1; // 0 = Traditional Node-Link Diagram, 1 = Hierarchy Tree (default), 2 = Grid
-        const viewOrder = [1, 0, 2]; // cycle order for the view toggle button
+        let viewMode = 1; // 0 = Traditional Node-Link Diagram, 1 = Hierarchy Tree (default), 2 = Grid, 3 = Food Company Chart
+        const viewOrder = [1, 0, 2, 3]; // cycle order for the view toggle button
 
         // Function to build Card HTML with Scrollable Content Areas
         function createCardHTML(item) {
@@ -1275,14 +1303,297 @@
             `;
         }
 
+        // ============ FOOD & BEVERAGE COMPANY ORG CHART (4TH VIEW) ============
+
+        // Full company roster: top-tier leadership + cascading department placeholders
+        const foodOrgData = [
+            // ============ TIER 1: EXECUTIVE BOARD ============
+            { id: 'f-ceo', rankOrder: 1, dept: 'c-suite', deptName: 'Executive Board', title: 'Chief Executive Officer (CEO)', name: 'Katherine Anne Bicodo' },
+            { id: 'f-coo', rankOrder: 2, dept: 'c-suite', deptName: 'Executive Board', title: 'Chief Operating Officer (COO)', name: 'Jan Allysandra Espia' },
+            { id: 'f-cfo', rankOrder: 3, dept: 'c-suite', deptName: 'Executive Board', title: 'Chief Financial Officer (CFO)', name: 'Mary Charlyn Aguirre' },
+            { id: 'f-cmo', rankOrder: 4, dept: 'c-suite', deptName: 'Executive Board', title: 'Chief Marketing Officer (CMO)', name: 'Clarieze Anne Gumban' },
+            { id: 'f-cco', rankOrder: 5, dept: 'c-suite', deptName: 'Executive Board', title: 'Chief Culinary Officer (CCO)', name: 'Aime Detore' },
+
+            // ============ CEO BRANCH: PEOPLE, LEGAL, CORPORATE AFFAIRS ============
+            { id: 'f-hrd', rankOrder: 6, dept: 'c-suite', deptName: 'People & Culture', title: 'Head of Human Resources', name: 'Miguel Santos' },
+            { id: 'f-tam', rankOrder: 7, dept: 'c-suite', deptName: 'People & Culture', title: 'Talent Acquisition Manager', name: 'Priya Sharma' },
+            { id: 'f-hro', rankOrder: 8, dept: 'c-suite', deptName: 'People & Culture', title: 'HR Operations Specialist', name: 'Diana Foster' },
+            { id: 'f-legal', rankOrder: 9, dept: 'c-suite', deptName: 'Legal & Compliance', title: 'Director of Legal & Compliance', name: 'Robert Chen' },
+            { id: 'f-compl', rankOrder: 10, dept: 'c-suite', deptName: 'Legal & Compliance', title: 'Compliance Officer', name: 'Lucia Fernandez' },
+            { id: 'f-corpa', rankOrder: 11, dept: 'c-suite', deptName: 'Corporate Affairs', title: 'Corporate Affairs Manager', name: 'Andrei Popov' },
+            { id: 'f-pr', rankOrder: 12, dept: 'c-suite', deptName: 'Corporate Affairs', title: 'Public Relations Specialist', name: 'Mia Thompson' },
+
+            // ============ COO BRANCH: SUPPLY, OPERATIONS, QUALITY ============
+            { id: 'f-scm', rankOrder: 13, dept: 'operations', deptName: 'Operations & Supply', title: 'Head of Supply Chain', name: 'James Riley' },
+            { id: 'f-log', rankOrder: 14, dept: 'operations', deptName: 'Operations & Supply', title: 'Logistics Manager', name: 'Grace Kim' },
+            { id: 'f-wh', rankOrder: 15, dept: 'operations', deptName: 'Operations & Supply', title: 'Warehouse Supervisor', name: 'Tomas Rivera' },
+            { id: 'f-proc', rankOrder: 16, dept: 'operations', deptName: 'Operations & Supply', title: 'Procurement Manager', name: 'Nina Petrova' },
+            { id: 'f-src', rankOrder: 17, dept: 'operations', deptName: 'Operations & Supply', title: 'Sourcing Specialist', name: 'Ella Novak' },
+            { id: 'f-dist', rankOrder: 18, dept: 'operations', deptName: 'Operations & Supply', title: 'Distribution Coordinator', name: 'Omar Haddad' },
+            { id: 'f-ops', rankOrder: 19, dept: 'operations', deptName: 'Operations & Supply', title: 'Operations Manager', name: 'Lucas Meyer' },
+            { id: 'f-plant', rankOrder: 20, dept: 'operations', deptName: 'Operations & Supply', title: 'Plant Production Supervisor', name: 'Sofia Rossi' },
+            { id: 'f-line', rankOrder: 21, dept: 'operations', deptName: 'Operations & Supply', title: 'Food Processing Line Operator', name: 'Marco Alvarez' },
+            { id: 'f-fac', rankOrder: 22, dept: 'operations', deptName: 'Operations & Supply', title: 'Facilities Supervisor', name: 'Hannah Lee' },
+            { id: 'f-qa', rankOrder: 23, dept: 'quality', deptName: 'Quality & Safety', title: 'Director of Quality Assurance', name: 'Dr. Alan Whitfield' },
+            { id: 'f-fs', rankOrder: 24, dept: 'quality', deptName: 'Quality & Safety', title: 'Food Safety Manager', name: 'Chloe Martin' },
+            { id: 'f-qc', rankOrder: 25, dept: 'quality', deptName: 'Quality & Safety', title: 'Quality Control Inspector', name: 'Victor Nguyen' },
+            { id: 'f-caud', rankOrder: 26, dept: 'quality', deptName: 'Quality & Safety', title: 'Compliance Auditor', name: 'Isabella Cruz' },
+
+            // ============ CFO BRANCH: FINANCE, CONTROLLING, IT ============
+            { id: 'f-fin', rankOrder: 27, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Finance Director', name: 'Ethan Brooks' },
+            { id: 'f-fa', rankOrder: 28, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Financial Analyst', name: 'Aisha Khan' },
+            { id: 'f-ap', rankOrder: 29, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Accounts Payable Manager', name: 'Peter Kowalski' },
+            { id: 'f-ctrl', rankOrder: 30, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Financial Controller', name: 'Rebecca Ortiz' },
+            { id: 'f-cost', rankOrder: 31, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Cost Accountant', name: 'Daniel Webb' },
+            { id: 'f-it', rankOrder: 32, dept: 'c-suite', deptName: 'Digital & IT', title: 'IT Director', name: 'Sara Lindqvist' },
+            { id: 'f-sys', rankOrder: 33, dept: 'c-suite', deptName: 'Digital & IT', title: 'Systems Administrator', name: 'Noah Fischer' },
+            { id: 'f-data', rankOrder: 34, dept: 'c-suite', deptName: 'Digital & IT', title: 'Data Analyst', name: 'Emma Delgado' },
+
+            // ============ CMO BRANCH: BRAND, SALES, INSIGHTS ============
+            { id: 'f-brand', rankOrder: 35, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Brand Marketing Director', name: 'Olivia Bennett' },
+            { id: 'f-digi', rankOrder: 36, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Digital Marketing Manager', name: 'Liam Turner' },
+            { id: 'f-social', rankOrder: 37, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Social Media Specialist', name: 'Zoe Anderson' },
+            { id: 'f-creative', rankOrder: 38, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Creative Design Lead', name: 'Nathan Cole' },
+            { id: 'f-sales', rankOrder: 39, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Sales Director', name: 'Isabel Moreau' },
+            { id: 'f-nsm', rankOrder: 40, dept: 'marketing', deptName: 'Marketing & Sales', title: 'National Sales Manager', name: 'Ryan Hughes' },
+            { id: 'f-ae', rankOrder: 41, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Account Executive', name: 'Fatima Al-Sayed' },
+            { id: 'f-retail', rankOrder: 42, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Retail Partnerships Manager', name: 'Jack Morrison' },
+            { id: 'f-mr', rankOrder: 43, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Market Research Director', name: 'Grace Sullivan' },
+            { id: 'f-insights', rankOrder: 44, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Consumer Insights Analyst', name: 'Tyler Grant' },
+
+            // ============ CCO BRANCH: R&D, CULINARY, NUTRITION ============
+            { id: 'f-rnd', rankOrder: 45, dept: 'culinary', deptName: 'Culinary & R&D', title: 'R&D Director', name: 'Dr. Mei Lin' },
+            { id: 'f-fsci', rankOrder: 46, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Food Scientist', name: 'Kevin Park' },
+            { id: 'f-pd', rankOrder: 47, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Product Development Specialist', name: 'Julia Novak' },
+            { id: 'f-recipe', rankOrder: 48, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Recipe Development Chef', name: 'Chef Marco Bellini' },
+            { id: 'f-cdir', rankOrder: 49, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Culinary Director', name: 'Chef Antonio Riva' },
+            { id: 'f-exec', rankOrder: 50, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Executive Chef', name: 'Chef Elena Marchetti' },
+            { id: 'f-commis', rankOrder: 51, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Commis Chef', name: 'Louis Fontaine' },
+            { id: 'f-nutr', rankOrder: 52, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Nutrition Director', name: 'Dr. Sarah Kim' },
+            { id: 'f-clin', rankOrder: 53, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Clinical Nutritionist', name: 'Rachel Goodwin' }
+        ];
+
+        // Reporting tree for the food company (exec board roots, each cascading into departments)
+        const foodExecRoots = [
+            {
+                id: 'f-ceo',
+                children: [
+                    { id: 'f-hrd', children: [
+                        { id: 'f-tam', children: [] },
+                        { id: 'f-hro', children: [] }
+                    ] },
+                    { id: 'f-legal', children: [
+                        { id: 'f-compl', children: [] }
+                    ] },
+                    { id: 'f-corpa', children: [
+                        { id: 'f-pr', children: [] }
+                    ] }
+                ]
+            },
+            {
+                id: 'f-coo',
+                children: [
+                    { id: 'f-scm', children: [
+                        { id: 'f-log', children: [ { id: 'f-wh', children: [] } ] },
+                        { id: 'f-proc', children: [ { id: 'f-src', children: [] } ] },
+                        { id: 'f-dist', children: [] }
+                    ] },
+                    { id: 'f-ops', children: [
+                        { id: 'f-plant', children: [ { id: 'f-line', children: [] } ] },
+                        { id: 'f-fac', children: [] }
+                    ] },
+                    { id: 'f-qa', children: [
+                        { id: 'f-fs', children: [ { id: 'f-qc', children: [] } ] },
+                        { id: 'f-caud', children: [] }
+                    ] }
+                ]
+            },
+            {
+                id: 'f-cfo',
+                children: [
+                    { id: 'f-fin', children: [
+                        { id: 'f-fa', children: [] },
+                        { id: 'f-ap', children: [] }
+                    ] },
+                    { id: 'f-ctrl', children: [
+                        { id: 'f-cost', children: [] }
+                    ] },
+                    { id: 'f-it', children: [
+                        { id: 'f-sys', children: [] },
+                        { id: 'f-data', children: [] }
+                    ] }
+                ]
+            },
+            {
+                id: 'f-cmo',
+                children: [
+                    { id: 'f-brand', children: [
+                        { id: 'f-digi', children: [ { id: 'f-social', children: [] } ] },
+                        { id: 'f-creative', children: [] }
+                    ] },
+                    { id: 'f-sales', children: [
+                        { id: 'f-nsm', children: [ { id: 'f-ae', children: [] } ] },
+                        { id: 'f-retail', children: [] }
+                    ] },
+                    { id: 'f-mr', children: [
+                        { id: 'f-insights', children: [] }
+                    ] }
+                ]
+            },
+            {
+                id: 'f-cco',
+                children: [
+                    { id: 'f-rnd', children: [
+                        { id: 'f-fsci', children: [ { id: 'f-pd', children: [] } ] },
+                        { id: 'f-recipe', children: [] }
+                    ] },
+                    { id: 'f-cdir', children: [
+                        { id: 'f-exec', children: [ { id: 'f-commis', children: [] } ] }
+                    ] },
+                    { id: 'f-nutr', children: [
+                        { id: 'f-clin', children: [] }
+                    ] }
+                ]
+            }
+        ];
+
+        // Generic tree builder: turns a tree definition + data array into positioned nodes
+        function buildDataTree(def, data, depth) {
+            const item = data.find(d => d.id === def.id);
+            return {
+                id: def.id,
+                item,
+                depth,
+                children: (def.children || []).map(c => buildDataTree(c, data, depth + 1))
+            };
+        }
+
+        function layoutNodeTree(roots, cardW, cardH, leafStep, levelGap) {
+            let leafIndex = 0;
+            let maxDepth = 0;
+
+            function assign(node, depth) {
+                maxDepth = Math.max(maxDepth, depth);
+                if (node.children.length === 0) {
+                    node.x = leafIndex++;
+                } else {
+                    node.children.forEach(c => assign(c, depth + 1));
+                    node.x = (node.children[0].x + node.children[node.children.length - 1].x) / 2;
+                }
+            }
+            roots.forEach(r => assign(r, 0));
+
+            const totalLeaves = Math.max(leafIndex, 1);
+            const stageWidth = totalLeaves * leafStep + 60;
+            const stageHeight = (maxDepth + 1) * (cardH + levelGap) + 40;
+
+            function place(node, depth) {
+                node.left = node.x * leafStep + 30;
+                node.top = depth * (cardH + levelGap) + 40;
+                node.cx = node.left + cardW / 2;
+                node.bottom = node.top + cardH;
+                node.children.forEach(c => place(c, depth + 1));
+            }
+            roots.forEach(r => place(r, 0));
+
+            return { roots, stageWidth, stageHeight };
+        }
+
+        function createFoodNodeHTML(item, node) {
+            const accent = deptAccent[item.dept] || deptAccent['c-suite'];
+            const isExec = node.depth === 0;
+            const rank = String(item.rankOrder).padStart(2, '0');
+            const dotColor = isExec ? '#FCD34D' : accent.color;
+
+            return `
+                <div class="diagram-node" data-id="${item.id}" data-dept="${item.dept}"
+                     data-search="${(item.name + ' ' + item.title + ' ' + item.deptName).toLowerCase()}"
+                     style="left:${node.left}px; top:${node.top}px;">
+                    <div class="diagram-card ${isExec ? 'diagram-card-root' : ''}">
+                        <div class="diagram-avatar ${isExec ? 'diagram-avatar-root' : ''}">
+                            <i class="fa-solid fa-user ${isExec ? 'text-amber-400' : accent.icon}"></i>
+                        </div>
+                        <div class="diagram-meta">
+                            <span class="diagram-title" title="${item.title}">${item.title}</span>
+                            <span class="diagram-name" title="${item.name}">${item.name}</span>
+                            <span class="diagram-rank">
+                                <span class="diagram-dot" style="background:${dotColor}; box-shadow:0 0 6px ${dotColor};"></span>
+                                #${rank} &middot; ${item.deptName}
+                            </span>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderFoodLayout() {
+            const stage = document.getElementById('foodOrgStage');
+            const cardW = 176, cardH = 84, leafStep = 200, levelGap = 56;
+            const roots = foodExecRoots.map(d => buildDataTree(d, foodOrgData, 0));
+            const { roots: laidRoots, stageWidth, stageHeight } = layoutNodeTree(roots, cardW, cardH, leafStep, levelGap);
+
+            stage.style.width = stageWidth + 'px';
+            stage.style.height = stageHeight + 'px';
+
+            let nodesHTML = '';
+            const connectors = [];
+
+            function walk(node) {
+                nodesHTML += createFoodNodeHTML(node.item, node);
+                node.children.forEach(child => {
+                    connectors.push({ parent: node, child });
+                    walk(child);
+                });
+            }
+            laidRoots.forEach(walk);
+
+            const paths = connectors.map(({ parent, child }) => {
+                const px = parent.cx;
+                const py = parent.bottom;
+                const cx = child.cx;
+                const cy = child.top;
+                const midY = py + (cy - py) / 2;
+                const gold = parent.depth === 0;
+                const d = `M ${px} ${py} L ${px} ${midY} L ${cx} ${midY} L ${cx} ${cy}`;
+                return `<path d="${d}" class="diagram-connector ${gold ? 'diagram-connector-gold' : 'diagram-connector-food'}"/>`;
+            }).join('');
+
+            stage.innerHTML = `
+                <svg id="foodOrgSvg" class="diagram-svg" width="${stageWidth}" height="${stageHeight}" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="connGradFood" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#2196F3"/>
+                            <stop offset="50%" stop-color="#90CAF9"/>
+                            <stop offset="100%" stop-color="#2196F3"/>
+                        </linearGradient>
+                        <linearGradient id="connGradGold" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#FBBF24"/>
+                            <stop offset="50%" stop-color="#FCD34D"/>
+                            <stop offset="100%" stop-color="#FBBF24"/>
+                        </linearGradient>
+                        <filter id="connGlowFood" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="1.6" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    ${paths}
+                </svg>
+                ${nodesHTML}
+            `;
+        }
+
         function applyViewMode() {
             const treeView = document.getElementById('orgChartTree');
             const gridView = document.getElementById('orgChartGrid');
             const diagramView = document.getElementById('orgChartDiagram');
+            const foodView = document.getElementById('orgChartFood');
 
             treeView.classList.toggle('hidden', viewMode !== 1);
             gridView.classList.toggle('hidden', viewMode !== 2);
             diagramView.classList.toggle('hidden', viewMode !== 0);
+            foodView.classList.toggle('hidden', viewMode !== 3);
 
             // Label + icon preview the NEXT mode the button will switch to
             const next = viewOrder[(viewOrder.indexOf(viewMode) + 1) % viewOrder.length];
@@ -1294,9 +1605,12 @@
             } else if (next === 1) {
                 viewIcon.className = 'fa-solid fa-sitemap';
                 viewLabel.textContent = 'Hierarchy Chart';
-            } else {
+            } else if (next === 2) {
                 viewIcon.className = 'fa-solid fa-grip';
                 viewLabel.textContent = 'Grid View';
+            } else {
+                viewIcon.className = 'fa-solid fa-utensils';
+                viewLabel.textContent = 'Food Chart';
             }
         }
 
@@ -1451,6 +1765,7 @@
             renderTreeLayout();
             renderGridLayout();
             renderDiagramLayout();
+            renderFoodLayout();
             applyViewMode();
 
             // Search input listener
