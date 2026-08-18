@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -349,7 +349,22 @@
                         <i class="fa-solid fa-bullhorn text-purple-400 mr-1"></i> Marketing & Sales
                     </button>
                     <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="quality">
-                        <i class="fa-solid fa-microscope text-amber-400 mr-1"></i> Quality & Insights
+                        <i class="fa-solid fa-microscope text-amber-400 mr-1"></i> Quality & Safety
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="people">
+                        <i class="fa-solid fa-users text-pink-400 mr-1"></i> People & Culture
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="legal">
+                        <i class="fa-solid fa-scale-balanced text-violet-400 mr-1"></i> Legal & Compliance
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="corporate">
+                        <i class="fa-solid fa-building-flag text-sky-400 mr-1"></i> Corporate Affairs
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="finance">
+                        <i class="fa-solid fa-chart-pie text-blue-400 mr-1"></i> Finance & Accounting
+                    </button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-mono rounded-xl border border-[#1E3252] bg-[#0B1320] text-slate-300 hover:border-[#2196F3] transition-all" data-dept="it">
+                        <i class="fa-solid fa-server text-cyan-400 mr-1"></i> Digital & IT
                     </button>
                 </div>
             </div>
@@ -362,7 +377,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                    <span>Active Roles: <strong class="text-emerald-400" id="countNodes">20</strong> Positions</span>
+                    <span>Active Roles: <strong class="text-emerald-400" id="countNodes">53</strong> Positions</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-[#90CAF9]"></span>
@@ -387,8 +402,8 @@
                     <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2196F3]/20 border border-[#2196F3]/50 text-[#90CAF9] text-xs font-mono font-bold uppercase tracking-wider mb-2 shadow">
                         <i class="fa-solid fa-crown text-amber-400"></i> Tier 01 &bull; Executive Command Board
                     </div>
-                    <h2 class="text-2xl font-black text-white tracking-tight font-mono tier-title-text">GLOBAL HARVEST GROUP EXECUTIVE BOARD</h2>
-                    <p class="text-xs text-[#90CAF9] font-mono mt-0.5 tier-sub-text">Aligned on parallel rank tier 1 — Executive decision makers</p>
+                    <h2 class="text-2xl font-black text-white tracking-tight font-mono tier-title-text">TERRA HARVEST FOODS EXECUTIVE BOARD</h2>
+                    <p class="text-xs text-[#90CAF9] font-mono mt-0.5 tier-sub-text">Aligned on parallel rank tier 1 &mdash; Executive decision makers</p>
                 </div>
 
                 <!-- Parallel Horizontal Row for Tier 1 Executives -->
@@ -412,12 +427,12 @@
                         <i class="fa-solid fa-sitemap text-[#90CAF9]"></i> Tier 02 - 04 &bull; Parallel Divisional Columns
                     </div>
                     <h3 class="text-xl font-extrabold text-white font-mono tier-title-text">OPERATIONAL DIVISIONS & FIELD ROLES</h3>
-                    <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Connected hierarchical layout with scrollable detail cards</p>
+                    <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">All divisions cascading from the executive board &mdash; scrollable detail cards</p>
                 </div>
 
                 <!-- Parallel Divisional Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 relative z-20" id="departmentsContainer">
-                    <!-- 4 main operational divisions populated via JS -->
+                    <!-- Divisional columns populated via JS -->
                 </div>
             </section>
         </div>
@@ -489,444 +504,6 @@
     </footer>
 
     <script>
-        // Organization Member Data - Ordered with Highest Executive Positions First (Rank #01 to #20)
-        const orgData = [
-            // ==================== TIER 1: C-SUITE (RANKS 1-5) ====================
-            {
-                id: 'exec-1',
-                rankOrder: 1,
-                rankTitle: 'Rank #01 • Chief Executive',
-                dept: 'c-suite',
-                deptName: 'Executive Command',
-                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
-                teamLogoIcon: 'fa-solid fa-crown',
-                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
-                teamName: 'Global Harvest C-Suite',
-                title: 'Chief Executive Officer (CEO)',
-                name: 'Elena Rostova',
-                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The CEO holds ultimate executive authority over the enterprise, establishing global food production vision, long-term sustainability frameworks, investor relations, and overall corporate growth.',
-                responsibilities: [
-                    'Defines overall global corporate vision & enterprise strategy.',
-                    'Directs international agricultural sourcing partnerships.',
-                    'Oversees all C-Suite officers and board governance.',
-                    'Drives sustainable food production initiatives worldwide.'
-                ],
-                skills: ['Global Strategy', 'Executive Leadership', 'M&A Governance', 'Sustainable Sourcing']
-            },
-            {
-                id: 'exec-2',
-                rankOrder: 2,
-                rankTitle: 'Rank #02 • Operations Command',
-                dept: 'c-suite',
-                deptName: 'Executive Command',
-                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
-                teamLogoIcon: 'fa-solid fa-gears',
-                teamLogoColor: 'text-[#2196F3] bg-[#2196F3]/20 border-[#2196F3]/40',
-                teamName: 'Global Harvest C-Suite',
-                title: 'Chief Operating Officer (COO)',
-                name: 'Marcus Vance',
-                avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The COO leads international operational execution, orchestrating worldwide processing facilities, cold-chain logistics networks, and daily manufacturing output.',
-                responsibilities: [
-                    'Manages day-to-day food processing & plant operations.',
-                    'Optimizes end-to-end global supply chain efficiency.',
-                    'Enforces operational safety protocols across facilities.',
-                    'Integrates automated logistics & inventory tracking.'
-                ],
-                skills: ['Supply Chain', 'Plant Operations', 'Cold-Chain Logistics', 'Process Automation']
-            },
-            {
-                id: 'exec-3',
-                rankOrder: 3,
-                rankTitle: 'Rank #03 • Culinary Command',
-                dept: 'c-suite',
-                deptName: 'Executive Command',
-                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
-                teamLogoIcon: 'fa-solid fa-utensils',
-                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
-                teamName: 'Global Harvest C-Suite',
-                title: 'Chief Culinary & R&D Officer (CCRO)',
-                name: 'Chef Jean-Luc Dubois',
-                avatar: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The CCRO bridges gastronomy with advanced food science, pioneering new commercial recipe formulations, nutritional integrity, and culinary innovations.',
-                responsibilities: [
-                    'Spearheads culinary design & regional flavor profiling.',
-                    'Leads scientific R&D for shelf-stability and nutrition.',
-                    'Standardizes sensory panel evaluation & testing.',
-                    'Pioneers next-generation organic food technologies.'
-                ],
-                skills: ['Culinary R&D', 'Recipe Testing', 'Nutritional Science', 'Menu Innovation']
-            },
-            {
-                id: 'exec-4',
-                rankOrder: 4,
-                rankTitle: 'Rank #04 • Financial Command',
-                dept: 'c-suite',
-                deptName: 'Executive Command',
-                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
-                teamLogoIcon: 'fa-solid fa-chart-pie',
-                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
-                teamName: 'Global Harvest C-Suite',
-                title: 'Chief Financial Officer (CFO)',
-                name: 'Sophia Patel',
-                avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The CFO directs capital allocation, financial risk management, international agricultural commodity hedging, and fiscal strategy.',
-                responsibilities: [
-                    'Oversees corporate financial strategy & risk mitigation.',
-                    'Manages commodity hedging and agricultural fiscal policy.',
-                    'Evaluates ROI for manufacturing plant expansions.',
-                    'Directs investor relations and financial reporting.'
-                ],
-                skills: ['Fiscal Strategy', 'Commodity Hedging', 'Capital Allocation', 'Financial Modeling']
-            },
-            {
-                id: 'exec-5',
-                rankOrder: 5,
-                rankTitle: 'Rank #05 • Strategy Command',
-                dept: 'c-suite',
-                deptName: 'Executive Command',
-                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
-                teamLogoIcon: 'fa-solid fa-earth-americas',
-                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
-                teamName: 'Global Harvest C-Suite',
-                title: 'Chief Strategy Officer (CSO)',
-                name: 'David Lindqvist',
-                avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The CSO evaluates global market growth opportunities, leads sustainability (ESG) policies, and establishes high-value retail partnerships.',
-                responsibilities: [
-                    'Identifies emerging global consumer & retail markets.',
-                    'Negotiates corporate M&A and strategic alliances.',
-                    'Establishes company-wide ESG & sustainability goals.',
-                    'Guides long-term brand portfolio diversification.'
-                ],
-                skills: ['Market Expansion', 'Strategic Alliances', 'ESG Leadership', 'Growth Planning']
-            },
-
-            // ==================== DIVISION 1: CULINARY & R&D ====================
-            {
-                id: 'cul-1',
-                rankOrder: 6,
-                rankTitle: 'Rank #06 • Division Leader',
-                dept: 'culinary',
-                deptName: 'Culinary Innovation & R&D',
-                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
-                teamLogoIcon: 'fa-solid fa-utensils',
-                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
-                teamName: 'Culinary Innovation Team',
-                title: 'Culinary Vice President',
-                name: 'Chef Amara Okafor',
-                avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Culinary VP transitions artisanal chef recipes into scalable industrial food formulas ready for commercial retail distribution.',
-                responsibilities: [
-                    'Formulates new retail product concept lines.',
-                    'Refines kitchen recipes for high-capacity manufacturing.',
-                    'Coordinates raw organic ingredient testing with R&D.'
-                ],
-                skills: ['Concept Formulation', 'Ingredient Sourcing', 'Sensory Lab', 'Culinary Design']
-            },
-            {
-                id: 'cul-2',
-                rankOrder: 7,
-                rankTitle: 'Rank #07 • Director Level',
-                dept: 'culinary',
-                deptName: 'Culinary Innovation & R&D',
-                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
-                teamLogoIcon: 'fa-solid fa-flask-vial',
-                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
-                teamName: 'Food Science & R&D Team',
-                title: 'R&D Director',
-                name: 'Dr. Hiroshi Tanaka',
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The R&D Director oversees laboratory testing, bio-preservation, thermal processing, and long-term shelf-life stability.',
-                responsibilities: [
-                    'Maintains scientific integrity of product formulations.',
-                    'Oversees shelf-life stability & bio-preservation.',
-                    'Translates benchtop recipes into factory parameters.'
-                ],
-                skills: ['Food Science', 'Preservation', 'Process Design', 'R&D Governance']
-            },
-            {
-                id: 'cul-3',
-                rankOrder: 8,
-                rankTitle: 'Rank #08 • Lead Level',
-                dept: 'culinary',
-                deptName: 'Culinary Innovation & R&D',
-                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
-                teamLogoIcon: 'fa-solid fa-vial',
-                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
-                teamName: 'Food Science & R&D Team',
-                title: 'R&D Lead',
-                name: 'Carlos Mendez',
-                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The R&D Lead executes physical lab test batches, monitoring flavor retention, pH balance, and ingredient interactions.',
-                responsibilities: [
-                    'Executes benchtop prototype test batches.',
-                    'Maintains laboratory equipment & measurement standards.',
-                    'Logs raw material chemical & physical behavior.'
-                ],
-                skills: ['Benchtop Prototyping', 'Lab Testing', 'Data Logging', 'Sensory Analytics']
-            },
-            {
-                id: 'cul-4',
-                rankOrder: 9,
-                rankTitle: 'Rank #09 • Manager Level',
-                dept: 'culinary',
-                deptName: 'Culinary Innovation & R&D',
-                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
-                teamLogoIcon: 'fa-solid fa-map-location-dot',
-                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
-                teamName: 'Product Lifecycle Team',
-                title: 'Product Roadmap Manager',
-                name: 'Claire Sterling',
-                avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Roadmap Manager governs stage-gate timelines, coordinating product launches from laboratory prototypes to full grocery production.',
-                responsibilities: [
-                    'Coordinates stage-gate product launch workflows.',
-                    'Aligns R&D output with commercial sales calendars.',
-                    'Monitors timeline milestones from lab to retail store.'
-                ],
-                skills: ['Roadmapping', 'Agile Product Mgmt', 'Stage-Gate', 'Release Timing']
-            },
-
-            // ==================== DIVISION 2: OPERATIONS & SUPPLY CHAIN ====================
-            {
-                id: 'ops-1',
-                rankOrder: 10,
-                rankTitle: 'Rank #10 • Division Leader',
-                dept: 'operations',
-                deptName: 'Ops & Supply Chain',
-                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
-                teamLogoIcon: 'fa-solid fa-truck-fast',
-                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
-                teamName: 'Global Logistics Operations',
-                title: 'Logistics Control Manager',
-                name: 'Vikram Singh',
-                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Logistics Control Manager supervises global distribution hubs, fleet telemetry, cold-chain integrity, and international customs clearance.',
-                responsibilities: [
-                    'Oversees global direct distribution networks.',
-                    'Manages warehouse throughput and fleet scheduling.',
-                    'Maintains real-time GPS cold-chain tracking.'
-                ],
-                skills: ['Global Logistics', 'TMS/ERP Systems', 'Fleet Control', 'Customs Rules']
-            },
-            {
-                id: 'ops-2',
-                rankOrder: 11,
-                rankTitle: 'Rank #11 • Manager Level',
-                dept: 'operations',
-                deptName: 'Ops & Supply Chain',
-                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
-                teamLogoIcon: 'fa-solid fa-wheat-awn',
-                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
-                teamName: 'Agricultural Procurement',
-                title: 'Sourcing Manager',
-                name: 'Rachel Adams',
-                avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Sourcing Manager negotiates contracts with organic agricultural growers worldwide, guaranteeing steady ingredient supplies.',
-                responsibilities: [
-                    'Negotiates supplier contracts with farm networks.',
-                    'Enforces fair-trade and organic sourcing standards.',
-                    'Mitigates raw harvest supply chain disruptions.'
-                ],
-                skills: ['Procurement', 'Vendor Negotiation', 'Supply Auditing', 'Raw Ingredients']
-            },
-            {
-                id: 'ops-3',
-                rankOrder: 12,
-                rankTitle: 'Rank #12 • Supervisor Level',
-                dept: 'operations',
-                deptName: 'Ops & Supply Chain',
-                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
-                teamLogoIcon: 'fa-solid fa-clipboard-check',
-                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
-                teamName: 'Plant Procurement Division',
-                title: 'Procurement Supervisor',
-                name: 'Gaston Mercier',
-                avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Procurement Supervisor coordinates daily plant purchase orders, raw stock verification, and local supplier deliveries.',
-                responsibilities: [
-                    'Supervises daily raw material purchase orders.',
-                    'Verifies incoming raw ingredient quality certificates.',
-                    'Coordinates localized processing plant inventory.'
-                ],
-                skills: ['Inventory Control', 'Purchase Orders', 'Quality Control', 'SAP/ERP']
-            },
-            {
-                id: 'ops-4',
-                rankOrder: 13,
-                rankTitle: 'Rank #13 • Coordinator Level',
-                dept: 'operations',
-                deptName: 'Ops & Supply Chain',
-                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
-                teamLogoIcon: 'fa-solid fa-boxes-stacked',
-                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
-                teamName: 'Cold-Chain Warehouse Team',
-                title: 'Supply Logistics Coordinator',
-                name: 'Hannah Abbott',
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Logistics Coordinator manages temperature-controlled storage, freight dispatch schedules, and inventory tracking.',
-                responsibilities: [
-                    'Monitors refrigerated freight temperature sensors.',
-                    'Schedules inbound and outbound delivery trucks.',
-                    'Optimizes warehouse storage rack layout.'
-                ],
-                skills: ['Cold-Chain Ops', 'Warehouse Management', 'Route Planning']
-            },
-            {
-                id: 'ops-5',
-                rankOrder: 14,
-                rankTitle: 'Rank #14 • Plant Specialist',
-                dept: 'operations',
-                deptName: 'Ops & Supply Chain',
-                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
-                teamLogoIcon: 'fa-solid fa-industry',
-                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
-                teamName: 'Plant Field Operations',
-                title: 'Plant Operations Technician',
-                name: 'David K. Miller',
-                avatar: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Operations Technician manages automated processing machinery, floor sanitation schedules, and batch record entries.',
-                responsibilities: [
-                    'Executes floor processing & packaging protocols.',
-                    'Maintains production machinery calibration.',
-                    'Logs inventory movements into central terminals.'
-                ],
-                skills: ['Floor Ops', 'Machinery Care', 'ERP Data Entry', 'Safety Logs']
-            },
-
-            // ==================== DIVISION 3: MARKETING & SALES ====================
-            {
-                id: 'mkt-1',
-                rankOrder: 15,
-                rankTitle: 'Rank #15 • Division Leader',
-                dept: 'marketing',
-                deptName: 'Marketing & Sales',
-                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
-                teamLogoIcon: 'fa-solid fa-bullhorn',
-                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
-                teamName: 'Global Brand & Growth',
-                title: 'Commercial Vice President',
-                name: 'Samantha Wright',
-                avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Commercial VP leads global branding, Direct-to-Consumer (D2C) channels, and international retail distribution expansion.',
-                responsibilities: [
-                    'Drives global brand identity & marketing campaigns.',
-                    'Expands Direct-to-Consumer (D2C) & retail pipelines.',
-                    'Fosters international supermarket chain partnerships.'
-                ],
-                skills: ['Global Branding', 'D2C Strategy', 'Retail Sales', 'Trade Growth']
-            },
-            {
-                id: 'mkt-2',
-                rankOrder: 16,
-                rankTitle: 'Rank #16 • Director Level',
-                dept: 'marketing',
-                deptName: 'Marketing & Sales',
-                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
-                teamLogoIcon: 'fa-solid fa-award',
-                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
-                teamName: 'Brand Integrity Team',
-                title: 'Brand Quality Director',
-                name: 'Arthur Pendelton',
-                avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Brand Quality Director ensures consumer-facing product consistency, commercial claim compliance, and brand reputation protection.',
-                responsibilities: [
-                    'Protects brand reputation across public channels.',
-                    'Ensures marketing claims align with product reality.',
-                    'Coordinates major international food industry expos.'
-                ],
-                skills: ['Brand Protection', 'Public Relations', 'Customer Experience']
-            },
-            {
-                id: 'mkt-3',
-                rankOrder: 17,
-                rankTitle: 'Rank #17 • Senior Analyst',
-                dept: 'marketing',
-                deptName: 'Marketing & Sales',
-                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
-                teamLogoIcon: 'fa-solid fa-chart-line',
-                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
-                teamName: 'Market Insights Team',
-                title: 'Senior Marketing Analyst',
-                name: 'Liam Chen',
-                avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Senior Marketing Analyst monitors retail POS sales trends, campaign performance metrics, and pricing strategy optimization.',
-                responsibilities: [
-                    'Analyzes retail point-of-sale sales metrics.',
-                    'Tracks digital campaign ROI & customer acquisition.',
-                    'Evaluates competitive product pricing in real time.'
-                ],
-                skills: ['Data Analytics', 'POS Analytics', 'Pricing Models', 'SQL / Tableau']
-            },
-            {
-                id: 'mkt-4',
-                rankOrder: 18,
-                rankTitle: 'Rank #18 • Specialist Level',
-                dept: 'marketing',
-                deptName: 'Marketing & Sales',
-                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
-                teamLogoIcon: 'fa-solid fa-handshake',
-                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
-                teamName: 'Retail Account Expansion',
-                title: 'Business Development Specialist',
-                name: 'Nadia Benali',
-                avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The Business Development Specialist acquires wholesale supermarket accounts and secures premium store placement.',
-                responsibilities: [
-                    'Secures new grocery chain and distributor contracts.',
-                    'Manages regional trade promotion budgets.',
-                    'Supports key retail account executive leads.'
-                ],
-                skills: ['B2B Sales', 'Distribution Deals', 'Account Management']
-            },
-
-            // ==================== DIVISION 4: QUALITY & INSIGHTS ====================
-            {
-                id: 'qa-1',
-                rankOrder: 19,
-                rankTitle: 'Rank #19 • Chief Quality Officer',
-                dept: 'quality',
-                deptName: 'Quality & Insights',
-                deptColor: 'border-amber-500 text-amber-400 bg-amber-500/10',
-                teamLogoIcon: 'fa-solid fa-shield-halved',
-                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
-                teamName: 'Global Quality & Safety',
-                title: 'Chief Quality Officer',
-                name: 'Dr. Evelyn Reed',
-                avatar: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The CQO governs global food safety standards, FDA/EFSA regulatory compliance, allergen safety, and HACCP facility certifications.',
-                responsibilities: [
-                    'Establishes enterprise food safety standards.',
-                    'Maintains FDA, EFSA, & HACCP regulatory compliance.',
-                    'Directs plant sanitation audits & contamination prevention.'
-                ],
-                skills: ['HACCP Governance', 'FDA/EFSA Regs', 'Safety Protocol', 'Audit Mgmt']
-            },
-            {
-                id: 'qa-2',
-                rankOrder: 20,
-                rankTitle: 'Rank #20 • VP Insights',
-                dept: 'quality',
-                deptName: 'Quality & Insights',
-                deptColor: 'border-amber-500 text-amber-400 bg-amber-500/10',
-                teamLogoIcon: 'fa-solid fa-magnifying-glass-chart',
-                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
-                teamName: 'Consumer Intelligence Team',
-                title: 'VP Consumer Insights',
-                name: 'Jonathan Sterling',
-                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300',
-                positionMeaning: 'The VP of Consumer Insights analyzes consumer sensory feedback, emerging dietary trends, and taste panel evaluation data.',
-                responsibilities: [
-                    'Gathers global consumer sensory taste metrics.',
-                    'Translates consumer feedback into product enhancements.',
-                    'Publishes quarterly Market & Dietary Trend Reports.'
-                ],
-                skills: ['Consumer Research', 'Focus Groups', 'Trend Forecasting', 'Surveys']
-            }
-        ];
-
         // State Management
         let isDarkMode = true;
         let isHoverMode = true; // True = Hover flip, False = Click flip
@@ -1078,10 +655,15 @@
 
             // Divisional Headers
             const deptKeys = [
-                { key: 'culinary', title: 'CULINARY & R&D', header: 'Product VPs & Science Directors', color: 'border-teal-500/40 bg-teal-950/40 text-teal-300' },
-                { key: 'operations', title: 'OPERATIONS & SUPPLY', header: 'Plant VPs & Logistics Managers', color: 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300' },
-                { key: 'marketing', title: 'MARKETING & SALES', header: 'Commercial VPs & Sales Leads', color: 'border-purple-500/40 bg-purple-950/40 text-purple-300' },
-                { key: 'quality', title: 'QUALITY & INSIGHTS', header: 'Quality Officers & Trend Leads', color: 'border-amber-500/40 bg-amber-950/40 text-amber-300' }
+                { key: 'people', title: 'PEOPLE & CULTURE', header: 'HR & Talent Teams', color: 'border-pink-500/40 bg-pink-950/40 text-pink-300' },
+                { key: 'legal', title: 'LEGAL & COMPLIANCE', header: 'Legal & Regulatory', color: 'border-violet-500/40 bg-violet-950/40 text-violet-300' },
+                { key: 'corporate', title: 'CORPORATE AFFAIRS', header: 'PR & Comms Teams', color: 'border-sky-500/40 bg-sky-950/40 text-sky-300' },
+                { key: 'operations', title: 'OPERATIONS & SUPPLY', header: 'Supply, Plants & Logistics', color: 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300' },
+                { key: 'quality', title: 'QUALITY & SAFETY', header: 'QA Officers & Auditors', color: 'border-amber-500/40 bg-amber-950/40 text-amber-300' },
+                { key: 'finance', title: 'FINANCE & ACCOUNTING', header: 'Fiscal & Cost Teams', color: 'border-blue-500/40 bg-blue-950/40 text-blue-300' },
+                { key: 'it', title: 'DIGITAL & IT', header: 'Systems & Data Teams', color: 'border-cyan-500/40 bg-cyan-950/40 text-cyan-300' },
+                { key: 'marketing', title: 'MARKETING & SALES', header: 'Brand, Sales & Insights', color: 'border-purple-500/40 bg-purple-950/40 text-purple-300' },
+                { key: 'culinary', title: 'CULINARY & R&D', header: 'Product, Science & Nutrition', color: 'border-teal-500/40 bg-teal-950/40 text-teal-300' }
             ];
 
             departmentsContainer.innerHTML = deptKeys.map(dept => {
@@ -1119,59 +701,113 @@
 
         // Reporting hierarchy: each node is a member id with a list of children (by id)
         const orgTreeDef = {
-            id: 'exec-1',
+            id: 'f-ceo',
             children: [
                 {
-                    id: 'exec-2',
+                    id: 'f-coo',
                     children: [
                         {
-                            id: 'ops-1',
+                            id: 'f-scm',
                             children: [
-                                { id: 'ops-2', children: [] },
-                                { id: 'ops-3', children: [] },
-                                { id: 'ops-4', children: [] },
-                                { id: 'ops-5', children: [] }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id: 'exec-3',
-                    children: [
-                        {
-                            id: 'cul-1',
-                            children: [
-                                { id: 'cul-2', children: [{ id: 'cul-3', children: [] }] },
-                                { id: 'cul-4', children: [] }
-                            ]
-                        }
-                    ]
-                },
-                { id: 'exec-4', children: [] },
-                {
-                    id: 'exec-5',
-                    children: [
-                        {
-                            id: 'mkt-1',
-                            children: [
-                                { id: 'mkt-2', children: [] },
-                                { id: 'mkt-3', children: [] },
-                                { id: 'mkt-4', children: [] }
+                                { id: 'f-log', children: [{ id: 'f-wh', children: [] }] },
+                                { id: 'f-proc', children: [{ id: 'f-src', children: [] }] },
+                                { id: 'f-dist', children: [] }
                             ]
                         },
-                        { id: 'qa-1', children: [{ id: 'qa-2', children: [] }] }
+                        {
+                            id: 'f-ops',
+                            children: [
+                                { id: 'f-plant', children: [{ id: 'f-line', children: [] }] },
+                                { id: 'f-fac', children: [] }
+                            ]
+                        },
+                        {
+                            id: 'f-qa',
+                            children: [
+                                { id: 'f-fs', children: [{ id: 'f-qc', children: [] }] },
+                                { id: 'f-caud', children: [] }
+                            ]
+                        }
                     ]
-                }
+                },
+                {
+                    id: 'f-cfo',
+                    children: [
+                        {
+                            id: 'f-fin',
+                            children: [
+                                { id: 'f-fa', children: [] },
+                                { id: 'f-ap', children: [] }
+                            ]
+                        },
+                        { id: 'f-ctrl', children: [{ id: 'f-cost', children: [] }] },
+                        {
+                            id: 'f-it',
+                            children: [
+                                { id: 'f-sys', children: [] },
+                                { id: 'f-data', children: [] }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'f-cmo',
+                    children: [
+                        {
+                            id: 'f-brand',
+                            children: [
+                                { id: 'f-digi', children: [{ id: 'f-social', children: [] }] },
+                                { id: 'f-creative', children: [] }
+                            ]
+                        },
+                        {
+                            id: 'f-sales',
+                            children: [
+                                { id: 'f-nsm', children: [{ id: 'f-ae', children: [] }] },
+                                { id: 'f-retail', children: [] }
+                            ]
+                        },
+                        { id: 'f-mr', children: [{ id: 'f-insights', children: [] }] }
+                    ]
+                },
+                {
+                    id: 'f-cco',
+                    children: [
+                        {
+                            id: 'f-rnd',
+                            children: [
+                                { id: 'f-fsci', children: [{ id: 'f-pd', children: [] }] },
+                                { id: 'f-recipe', children: [] }
+                            ]
+                        },
+                        { id: 'f-cdir', children: [{ id: 'f-exec', children: [{ id: 'f-commis', children: [] }] }] },
+                        { id: 'f-nutr', children: [{ id: 'f-clin', children: [] }] }
+                    ]
+                },
+                {
+                    id: 'f-hrd',
+                    children: [
+                        { id: 'f-tam', children: [] },
+                        { id: 'f-hro', children: [] }
+                    ]
+                },
+                { id: 'f-legal', children: [{ id: 'f-compl', children: [] }] },
+                { id: 'f-corpa', children: [{ id: 'f-pr', children: [] }] }
             ]
         };
 
         // Department accent palette for node silhouettes
         const deptAccent = {
             'c-suite':    { color: '#90CAF9', icon: 'text-[#90CAF9]' },
+            'people':     { color: '#F472B6', icon: 'text-pink-400' },
+            'legal':      { color: '#A78BFA', icon: 'text-violet-400' },
+            'corporate':  { color: '#38BDF8', icon: 'text-sky-400' },
             'culinary':   { color: '#2DD4BF', icon: 'text-teal-400' },
             'operations': { color: '#34D399', icon: 'text-emerald-400' },
-            'marketing':  { color: '#C084FC', icon: 'text-purple-400' },
-            'quality':    { color: '#FBBF24', icon: 'text-amber-400' }
+            'quality':    { color: '#FBBF24', icon: 'text-amber-400' },
+            'finance':    { color: '#60A5FA', icon: 'text-blue-400' },
+            'it':         { color: '#22D3EE', icon: 'text-cyan-400' },
+            'marketing':  { color: '#C084FC', icon: 'text-purple-400' }
         };
 
         const DIAGRAM_CARD_W = 176;
@@ -1315,13 +951,13 @@
             { id: 'f-cco', rankOrder: 5, dept: 'c-suite', deptName: 'Executive Board', title: 'Chief Culinary Officer (CCO)', name: 'Aime Detore' },
 
             // ============ CEO BRANCH: PEOPLE, LEGAL, CORPORATE AFFAIRS ============
-            { id: 'f-hrd', rankOrder: 6, dept: 'c-suite', deptName: 'People & Culture', title: 'Head of Human Resources', name: 'Miguel Santos' },
-            { id: 'f-tam', rankOrder: 7, dept: 'c-suite', deptName: 'People & Culture', title: 'Talent Acquisition Manager', name: 'Priya Sharma' },
-            { id: 'f-hro', rankOrder: 8, dept: 'c-suite', deptName: 'People & Culture', title: 'HR Operations Specialist', name: 'Diana Foster' },
-            { id: 'f-legal', rankOrder: 9, dept: 'c-suite', deptName: 'Legal & Compliance', title: 'Director of Legal & Compliance', name: 'Robert Chen' },
-            { id: 'f-compl', rankOrder: 10, dept: 'c-suite', deptName: 'Legal & Compliance', title: 'Compliance Officer', name: 'Lucia Fernandez' },
-            { id: 'f-corpa', rankOrder: 11, dept: 'c-suite', deptName: 'Corporate Affairs', title: 'Corporate Affairs Manager', name: 'Andrei Popov' },
-            { id: 'f-pr', rankOrder: 12, dept: 'c-suite', deptName: 'Corporate Affairs', title: 'Public Relations Specialist', name: 'Mia Thompson' },
+            { id: 'f-hrd', rankOrder: 6, dept: 'people', deptName: 'People & Culture', title: 'Head of Human Resources', name: 'Miguel Santos' },
+            { id: 'f-tam', rankOrder: 7, dept: 'people', deptName: 'People & Culture', title: 'Talent Acquisition Manager', name: 'Priya Sharma' },
+            { id: 'f-hro', rankOrder: 8, dept: 'people', deptName: 'People & Culture', title: 'HR Operations Specialist', name: 'Diana Foster' },
+            { id: 'f-legal', rankOrder: 9, dept: 'legal', deptName: 'Legal & Compliance', title: 'Director of Legal & Compliance', name: 'Robert Chen' },
+            { id: 'f-compl', rankOrder: 10, dept: 'legal', deptName: 'Legal & Compliance', title: 'Compliance Officer', name: 'Lucia Fernandez' },
+            { id: 'f-corpa', rankOrder: 11, dept: 'corporate', deptName: 'Corporate Affairs', title: 'Corporate Affairs Manager', name: 'Andrei Popov' },
+            { id: 'f-pr', rankOrder: 12, dept: 'corporate', deptName: 'Corporate Affairs', title: 'Public Relations Specialist', name: 'Mia Thompson' },
 
             // ============ COO BRANCH: SUPPLY, OPERATIONS, QUALITY ============
             { id: 'f-scm', rankOrder: 13, dept: 'operations', deptName: 'Operations & Supply', title: 'Head of Supply Chain', name: 'James Riley' },
@@ -1340,14 +976,14 @@
             { id: 'f-caud', rankOrder: 26, dept: 'quality', deptName: 'Quality & Safety', title: 'Compliance Auditor', name: 'Isabella Cruz' },
 
             // ============ CFO BRANCH: FINANCE, CONTROLLING, IT ============
-            { id: 'f-fin', rankOrder: 27, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Finance Director', name: 'Ethan Brooks' },
-            { id: 'f-fa', rankOrder: 28, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Financial Analyst', name: 'Aisha Khan' },
-            { id: 'f-ap', rankOrder: 29, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Accounts Payable Manager', name: 'Peter Kowalski' },
-            { id: 'f-ctrl', rankOrder: 30, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Financial Controller', name: 'Rebecca Ortiz' },
-            { id: 'f-cost', rankOrder: 31, dept: 'c-suite', deptName: 'Finance & Accounting', title: 'Cost Accountant', name: 'Daniel Webb' },
-            { id: 'f-it', rankOrder: 32, dept: 'c-suite', deptName: 'Digital & IT', title: 'IT Director', name: 'Sara Lindqvist' },
-            { id: 'f-sys', rankOrder: 33, dept: 'c-suite', deptName: 'Digital & IT', title: 'Systems Administrator', name: 'Noah Fischer' },
-            { id: 'f-data', rankOrder: 34, dept: 'c-suite', deptName: 'Digital & IT', title: 'Data Analyst', name: 'Emma Delgado' },
+            { id: 'f-fin', rankOrder: 27, dept: 'finance', deptName: 'Finance & Accounting', title: 'Finance Director', name: 'Ethan Brooks' },
+            { id: 'f-fa', rankOrder: 28, dept: 'finance', deptName: 'Finance & Accounting', title: 'Financial Analyst', name: 'Aisha Khan' },
+            { id: 'f-ap', rankOrder: 29, dept: 'finance', deptName: 'Finance & Accounting', title: 'Accounts Payable Manager', name: 'Peter Kowalski' },
+            { id: 'f-ctrl', rankOrder: 30, dept: 'finance', deptName: 'Finance & Accounting', title: 'Financial Controller', name: 'Rebecca Ortiz' },
+            { id: 'f-cost', rankOrder: 31, dept: 'finance', deptName: 'Finance & Accounting', title: 'Cost Accountant', name: 'Daniel Webb' },
+            { id: 'f-it', rankOrder: 32, dept: 'it', deptName: 'Digital & IT', title: 'IT Director', name: 'Sara Lindqvist' },
+            { id: 'f-sys', rankOrder: 33, dept: 'it', deptName: 'Digital & IT', title: 'Systems Administrator', name: 'Noah Fischer' },
+            { id: 'f-data', rankOrder: 34, dept: 'it', deptName: 'Digital & IT', title: 'Data Analyst', name: 'Emma Delgado' },
 
             // ============ CMO BRANCH: BRAND, SALES, INSIGHTS ============
             { id: 'f-brand', rankOrder: 35, dept: 'marketing', deptName: 'Marketing & Sales', title: 'Brand Marketing Director', name: 'Olivia Bennett' },
@@ -1372,6 +1008,118 @@
             { id: 'f-nutr', rankOrder: 52, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Nutrition Director', name: 'Dr. Sarah Kim' },
             { id: 'f-clin', rankOrder: 53, dept: 'culinary', deptName: 'Culinary & R&D', title: 'Clinical Nutritionist', name: 'Rachel Goodwin' }
         ];
+
+        // Department card metadata used to build the flip-card views (Hierarchy, Grid, Traditional)
+        const deptCardMeta = {
+            'c-suite': {
+                deptColor: 'border-[#2196F3] text-[#2196F3] bg-[#2196F3]/10',
+                teamLogoIcon: 'fa-solid fa-crown',
+                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
+                teamName: 'Executive Board',
+                meaning: 'The Executive Board commands enterprise vision, corporate governance and the long-term strategic direction of the food company.',
+                responsibilities: ['Sets corporate vision & enterprise strategy', 'Directs executive officers and divisions', 'Drives investor & board governance'],
+                skills: ['Executive Leadership', 'Corporate Strategy', 'Governance', 'Stakeholder Relations']
+            },
+            'people': {
+                deptColor: 'border-pink-500 text-pink-400 bg-pink-500/10',
+                teamLogoIcon: 'fa-solid fa-users',
+                teamLogoColor: 'text-pink-400 bg-pink-500/20 border-pink-400/40',
+                teamName: 'People & Culture Team',
+                meaning: 'The People & Culture team builds a thriving workforce through recruitment, development and workplace programs.',
+                responsibilities: ['Attracts & retains top talent', 'Runs training & development programs', 'Cultivates inclusive company culture'],
+                skills: ['Talent Acquisition', 'HR Operations', 'Learning & Development', 'Culture Building']
+            },
+            'legal': {
+                deptColor: 'border-violet-500 text-violet-400 bg-violet-500/10',
+                teamLogoIcon: 'fa-solid fa-scale-balanced',
+                teamLogoColor: 'text-violet-400 bg-violet-500/20 border-violet-400/40',
+                teamName: 'Legal & Compliance Team',
+                meaning: 'The Legal & Compliance team protects the company through regulatory oversight, contracts and corporate governance.',
+                responsibilities: ['Ensures regulatory & food-law compliance', 'Manages corporate contracts & agreements', 'Guides risk & governance policies'],
+                skills: ['Regulatory Law', 'Compliance', 'Contract Negotiation', 'Risk Management']
+            },
+            'corporate': {
+                deptColor: 'border-sky-500 text-sky-400 bg-sky-500/10',
+                teamLogoIcon: 'fa-solid fa-building-flag',
+                teamLogoColor: 'text-sky-400 bg-sky-500/20 border-sky-400/40',
+                teamName: 'Corporate Affairs Team',
+                meaning: 'Corporate Affairs manages external communications, public relations and corporate reputation worldwide.',
+                responsibilities: ['Leads media & public relations', 'Manages brand communications', 'Builds corporate reputation & CSR'],
+                skills: ['Public Relations', 'Media Relations', 'Corporate Comms', 'Reputation Management']
+            },
+            'operations': {
+                deptColor: 'border-emerald-500 text-emerald-400 bg-emerald-500/10',
+                teamLogoIcon: 'fa-solid fa-truck-fast',
+                teamLogoColor: 'text-emerald-400 bg-emerald-500/20 border-emerald-400/40',
+                teamName: 'Operations & Supply Team',
+                meaning: 'Operations & Supply keeps raw materials flowing, plants running and finished goods moving to market efficiently.',
+                responsibilities: ['Runs sourcing & procurement networks', 'Oversees plant production & logistics', 'Manages cold-chain distribution'],
+                skills: ['Supply Chain', 'Plant Operations', 'Logistics', 'Procurement']
+            },
+            'quality': {
+                deptColor: 'border-amber-500 text-amber-400 bg-amber-500/10',
+                teamLogoIcon: 'fa-solid fa-shield-halved',
+                teamLogoColor: 'text-amber-400 bg-amber-500/20 border-amber-400/40',
+                teamName: 'Quality & Safety Team',
+                meaning: 'The Quality & Safety team safeguards food safety standards, certifications and consumer trust across all facilities.',
+                responsibilities: ['Enforces food-safety protocols', 'Maintains HACCP & regulatory certification', 'Runs audits & contamination prevention'],
+                skills: ['Food Safety', 'HACCP', 'Quality Audits', 'Regulatory Compliance']
+            },
+            'finance': {
+                deptColor: 'border-blue-500 text-blue-400 bg-blue-500/10',
+                teamLogoIcon: 'fa-solid fa-chart-pie',
+                teamLogoColor: 'text-blue-400 bg-blue-500/20 border-blue-400/40',
+                teamName: 'Finance & Accounting Team',
+                meaning: 'Finance & Accounting steers budgeting, cost control, financial reporting and enterprise profitability.',
+                responsibilities: ['Directs budgets & financial planning', 'Manages accounting & cost control', 'Reports enterprise financial health'],
+                skills: ['Financial Planning', 'Cost Accounting', 'Budgeting', 'Reporting']
+            },
+            'it': {
+                deptColor: 'border-cyan-500 text-cyan-400 bg-cyan-500/10',
+                teamLogoIcon: 'fa-solid fa-server',
+                teamLogoColor: 'text-cyan-400 bg-cyan-500/20 border-cyan-400/40',
+                teamName: 'Digital & IT Team',
+                meaning: 'Digital & IT powers enterprise systems, data analytics and secure technology infrastructure.',
+                responsibilities: ['Maintains ERP & enterprise systems', 'Protects data & cybersecurity', 'Delivers analytics & automation'],
+                skills: ['IT Infrastructure', 'ERP Systems', 'Cybersecurity', 'Data Analytics']
+            },
+            'marketing': {
+                deptColor: 'border-purple-500 text-purple-400 bg-purple-500/10',
+                teamLogoIcon: 'fa-solid fa-bullhorn',
+                teamLogoColor: 'text-purple-400 bg-purple-500/20 border-purple-400/40',
+                teamName: 'Marketing & Sales Team',
+                meaning: 'Marketing & Sales builds brand presence, drives retail growth and unlocks new consumer markets.',
+                responsibilities: ['Leads brand & campaign strategy', 'Expands retail & D2C sales channels', 'Analyzes consumer market trends'],
+                skills: ['Brand Strategy', 'Sales Growth', 'Market Research', 'Retail Partnerships']
+            },
+            'culinary': {
+                deptColor: 'border-teal-500 text-teal-400 bg-teal-500/10',
+                teamLogoIcon: 'fa-solid fa-utensils',
+                teamLogoColor: 'text-teal-400 bg-teal-500/20 border-teal-400/40',
+                teamName: 'Culinary & R&D Team',
+                meaning: 'Culinary & R&D transforms recipes into market-ready products through food science and sensory excellence.',
+                responsibilities: ['Develops new product formulations', 'Refines recipes for manufacturing', 'Pioneers food science & nutrition'],
+                skills: ['Product R&D', 'Recipe Development', 'Food Science', 'Nutrition']
+            }
+        };
+
+        // Single source of truth for EVERY chart view (Hierarchy, Traditional, Grid, Food)
+        const orgData = foodOrgData.map(item => {
+            const meta = deptCardMeta[item.dept] || deptCardMeta['c-suite'];
+            const initials = item.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            return {
+                ...item,
+                rankTitle: `Rank #${String(item.rankOrder).padStart(2, '0')}`,
+                avatar: `https://placehold.co/150x150/132035/90CAF9?text=${encodeURIComponent(initials)}`,
+                deptColor: meta.deptColor,
+                teamLogoIcon: meta.teamLogoIcon,
+                teamLogoColor: meta.teamLogoColor,
+                teamName: meta.teamName,
+                positionMeaning: meta.meaning,
+                responsibilities: meta.responsibilities,
+                skills: meta.skills
+            };
+        });
 
         // Reporting tree for the food company (exec board roots, each cascading into departments)
         const foodExecRoots = [
@@ -1528,7 +1276,7 @@
         function renderFoodLayout() {
             const stage = document.getElementById('foodOrgStage');
             const cardW = 176, cardH = 84, leafStep = 200, levelGap = 56;
-            const roots = foodExecRoots.map(d => buildDataTree(d, foodOrgData, 0));
+            const roots = foodExecRoots.map(d => buildDataTree(d, orgData, 0));
             const { roots: laidRoots, stageWidth, stageHeight } = layoutNodeTree(roots, cardW, cardH, leafStep, levelGap);
 
             stage.style.width = stageWidth + 'px';
