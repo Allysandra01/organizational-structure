@@ -130,6 +130,121 @@
         .card-pulse {
             animation: pulseGlow 3.5s infinite ease-in-out;
         }
+
+        /* ============ Traditional Node-Link Org Chart (Diagram View) ============ */
+        .diagram-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .diagram-connector {
+            fill: none;
+            stroke: url(#connGrad);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: url(#connGlow);
+        }
+        .diagram-node {
+            position: absolute;
+            width: 176px;
+            z-index: 2;
+            transition: opacity 0.35s ease, filter 0.35s ease;
+        }
+        .diagram-node.diagram-node-dimmed {
+            opacity: 0.18;
+            filter: saturate(0.4);
+        }
+        .diagram-card {
+            position: relative;
+            min-height: 84px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: linear-gradient(160deg, #132035 0%, #0B1320 100%);
+            border: 1.5px solid rgba(33, 150, 243, 0.75);
+            box-shadow: 0 0 12px rgba(33, 150, 243, 0.35), inset 0 0 10px rgba(33, 150, 243, 0.07);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .diagram-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(144, 202, 249, 0.95);
+            box-shadow: 0 0 22px rgba(144, 202, 249, 0.55), inset 0 0 12px rgba(33, 150, 243, 0.12);
+        }
+        .diagram-card-root {
+            border: 2px solid rgba(251, 191, 36, 0.85);
+            background: linear-gradient(160deg, #1A2B45 0%, #0B1320 100%);
+            box-shadow: 0 0 18px rgba(251, 191, 36, 0.4), inset 0 0 14px rgba(251, 191, 36, 0.12);
+        }
+        .diagram-card-root:hover {
+            border-color: #FCD34D;
+            box-shadow: 0 0 28px rgba(251, 191, 36, 0.7), inset 0 0 16px rgba(251, 191, 36, 0.18);
+        }
+        .diagram-avatar {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1E3252 0%, #0B1320 100%);
+            border: 1.5px solid rgba(33, 150, 243, 0.5);
+            box-shadow: inset 0 0 8px rgba(33, 150, 243, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+        .diagram-avatar-root {
+            border-color: rgba(251, 191, 36, 0.7);
+            box-shadow: inset 0 0 8px rgba(251, 191, 36, 0.25);
+        }
+        .diagram-meta {
+            min-width: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .diagram-title {
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #90CAF9;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+        .diagram-name {
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #FFFFFF;
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .diagram-rank {
+            font-size: 9px;
+            font-family: 'Fira Code', monospace;
+            color: #64748B;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .diagram-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
@@ -181,8 +296,8 @@
                     <span class="hidden md:inline">Flip All Cards</span>
                 </button>
 
-                <!-- View Mode Toggle (Tree Hierarchy vs Grid) -->
-                <button id="viewToggleBtn" class="px-3.5 py-2 text-xs font-mono bg-[#2196F3] hover:bg-[#1976D2] text-white border border-[#90CAF9]/50 rounded-xl transition-all flex items-center gap-2 shadow-md">
+                <!-- View Mode Toggle (Traditional Diagram vs Tree Hierarchy vs Grid) -->
+                <button id="viewToggleBtn" class="px-3.5 py-2 text-xs font-mono bg-[#2196F3] hover:bg-[#1976D2] text-white border border-[#90CAF9]/50 rounded-xl transition-all flex items-center gap-2 shadow-md" title="Cycle View Mode">
                     <i class="fa-solid fa-sitemap" id="viewIcon"></i>
                     <span id="viewLabel" class="hidden sm:inline font-bold">Hierarchy Chart</span>
                 </button>
@@ -300,6 +415,24 @@
         <!-- Alternative Grid View (Hidden by default) -->
         <div id="orgChartGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative z-10">
             <!-- Populated via JS -->
+        </div>
+
+        <!-- Traditional Node-Link Org Chart Diagram View (Hidden by default) -->
+        <div id="orgChartDiagram" class="hidden relative z-10">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2196F3]/20 border border-[#2196F3]/50 text-[#90CAF9] text-xs font-mono font-bold uppercase tracking-wider mb-2 shadow">
+                    <i class="fa-solid fa-diagram-project text-[#90CAF9]"></i> Traditional Hierarchy &bull; Node-Link Tree
+                </div>
+                <h3 class="text-xl font-extrabold text-white font-mono tier-title-text">EXECUTIVE COMMAND TREE</h3>
+                <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Top-down reporting structure with glowing connector branches &mdash; scroll sideways to view the full tree</p>
+            </div>
+
+            <!-- Scrollable canvas holding absolutely positioned nodes + SVG connectors -->
+            <div class="bg-brand-darkCard/60 border border-brand-darkBorder rounded-2xl p-8 relative overflow-x-auto shadow-xl backdrop-blur-sm transition-colors duration-300">
+                <div id="orgDiagramStage" class="relative mx-auto">
+                    <!-- Nodes + connectors injected via JavaScript -->
+                </div>
+            </div>
         </div>
 
         <!-- Empty Filter Result Message -->
@@ -771,7 +904,8 @@
         let isHoverMode = true; // True = Hover flip, False = Click flip
         let activeDepartment = 'all';
         let isAllFlipped = false;
-        let isTreeView = true;
+        let viewMode = 1; // 0 = Traditional Node-Link Diagram, 1 = Hierarchy Tree (default), 2 = Grid
+        const viewOrder = [1, 0, 2]; // cycle order for the view toggle button
 
         // Function to build Card HTML with Scrollable Content Areas
         function createCardHTML(item) {
@@ -953,6 +1087,219 @@
             attachCardEventListeners();
         }
 
+        // ============ TRADITIONAL NODE-LINK ORG CHART (DIAGRAM VIEW) ============
+
+        // Reporting hierarchy: each node is a member id with a list of children (by id)
+        const orgTreeDef = {
+            id: 'exec-1',
+            children: [
+                {
+                    id: 'exec-2',
+                    children: [
+                        {
+                            id: 'ops-1',
+                            children: [
+                                { id: 'ops-2', children: [] },
+                                { id: 'ops-3', children: [] },
+                                { id: 'ops-4', children: [] },
+                                { id: 'ops-5', children: [] }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'exec-3',
+                    children: [
+                        {
+                            id: 'cul-1',
+                            children: [
+                                { id: 'cul-2', children: [{ id: 'cul-3', children: [] }] },
+                                { id: 'cul-4', children: [] }
+                            ]
+                        }
+                    ]
+                },
+                { id: 'exec-4', children: [] },
+                {
+                    id: 'exec-5',
+                    children: [
+                        {
+                            id: 'mkt-1',
+                            children: [
+                                { id: 'mkt-2', children: [] },
+                                { id: 'mkt-3', children: [] },
+                                { id: 'mkt-4', children: [] }
+                            ]
+                        },
+                        { id: 'qa-1', children: [{ id: 'qa-2', children: [] }] }
+                    ]
+                }
+            ]
+        };
+
+        // Department accent palette for node silhouettes
+        const deptAccent = {
+            'c-suite':    { color: '#90CAF9', icon: 'text-[#90CAF9]' },
+            'culinary':   { color: '#2DD4BF', icon: 'text-teal-400' },
+            'operations': { color: '#34D399', icon: 'text-emerald-400' },
+            'marketing':  { color: '#C084FC', icon: 'text-purple-400' },
+            'quality':    { color: '#FBBF24', icon: 'text-amber-400' }
+        };
+
+        const DIAGRAM_CARD_W = 176;
+        const DIAGRAM_CARD_H = 84;
+        const DIAGRAM_LEAF_STEP = 214;
+        const DIAGRAM_LEVEL_GAP = 56;
+
+        function buildDiagramTree() {
+            const dataById = Object.fromEntries(orgData.map(d => [d.id, d]));
+            function toNode(def, depth) {
+                const item = dataById[def.id];
+                return {
+                    id: def.id,
+                    item,
+                    depth,
+                    children: def.children.map(c => toNode(c, depth + 1))
+                };
+            }
+            return toNode(orgTreeDef, 0);
+        }
+
+        function layoutDiagramTree(root) {
+            let leafIndex = 0;
+            let maxDepth = 0;
+
+            // Post-order pass: leaves get sequential x slots, parents center over children
+            function assign(node, depth) {
+                maxDepth = Math.max(maxDepth, depth);
+                if (node.children.length === 0) {
+                    node.x = leafIndex++;
+                } else {
+                    node.children.forEach(c => assign(c, depth + 1));
+                    node.x = (node.children[0].x + node.children[node.children.length - 1].x) / 2;
+                }
+            }
+            assign(root, 0);
+
+            const totalLeaves = Math.max(leafIndex, 1);
+            const stageWidth = totalLeaves * DIAGRAM_LEAF_STEP + 60;
+            const stageHeight = maxDepth * (DIAGRAM_CARD_H + DIAGRAM_LEVEL_GAP) + DIAGRAM_CARD_H + 80;
+
+            function place(node, depth) {
+                node.left = node.x * DIAGRAM_LEAF_STEP + 30;
+                node.top = depth * (DIAGRAM_CARD_H + DIAGRAM_LEVEL_GAP) + 40;
+                node.cx = node.left + DIAGRAM_CARD_W / 2;
+                node.bottom = node.top + DIAGRAM_CARD_H;
+                node.children.forEach(c => place(c, depth + 1));
+            }
+            place(root, 0);
+
+            return { root, stageWidth, stageHeight };
+        }
+
+        function createDiagramNodeHTML(item, node) {
+            const accent = deptAccent[item.dept] || deptAccent['c-suite'];
+            const isRoot = node.depth === 0;
+            const rank = String(item.rankOrder).padStart(2, '0');
+            const dotColor = isRoot ? '#FCD34D' : accent.color;
+
+            return `
+                <div class="diagram-node" data-id="${item.id}" data-dept="${item.dept}"
+                     data-search="${(item.name + ' ' + item.title + ' ' + item.deptName + ' ' + item.teamName + ' ' + item.skills.join(' ')).toLowerCase()}"
+                     style="left:${node.left}px; top:${node.top}px;">
+                    <div class="diagram-card ${isRoot ? 'diagram-card-root' : ''}">
+                        <div class="diagram-avatar ${isRoot ? 'diagram-avatar-root' : ''}">
+                            <i class="fa-solid fa-user ${isRoot ? 'text-amber-400' : accent.icon}"></i>
+                        </div>
+                        <div class="diagram-meta">
+                            <span class="diagram-title" title="${item.title}">${item.title}</span>
+                            <span class="diagram-name" title="${item.name}">${item.name}</span>
+                            <span class="diagram-rank">
+                                <span class="diagram-dot" style="background:${dotColor}; box-shadow:0 0 6px ${dotColor};"></span>
+                                #${rank} &middot; ${item.deptName}
+                            </span>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderDiagramLayout() {
+            const stage = document.getElementById('orgDiagramStage');
+            const { root, stageWidth, stageHeight } = layoutDiagramTree(buildDiagramTree());
+
+            stage.style.width = stageWidth + 'px';
+            stage.style.height = stageHeight + 'px';
+
+            let nodesHTML = '';
+            const connectors = [];
+
+            function walk(node) {
+                nodesHTML += createDiagramNodeHTML(node.item, node);
+                node.children.forEach(child => {
+                    connectors.push({ parent: node, child });
+                    walk(child);
+                });
+            }
+            walk(root);
+
+            // Elbow connector paths: parent bottom -> mid level -> child top
+            const paths = connectors.map(({ parent, child }) => {
+                const px = parent.cx;
+                const py = parent.bottom;
+                const cx = child.cx;
+                const cy = child.top;
+                const midY = py + (cy - py) / 2;
+                const d = `M ${px} ${py} L ${px} ${midY} L ${cx} ${midY} L ${cx} ${cy}`;
+                return `<path d="${d}" class="diagram-connector"/>`;
+            }).join('');
+
+            stage.innerHTML = `
+                <svg id="orgDiagramSvg" class="diagram-svg" width="${stageWidth}" height="${stageHeight}" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="connGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#2196F3"/>
+                            <stop offset="50%" stop-color="#90CAF9"/>
+                            <stop offset="100%" stop-color="#2196F3"/>
+                        </linearGradient>
+                        <filter id="connGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="1.6" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    ${paths}
+                </svg>
+                ${nodesHTML}
+            `;
+        }
+
+        function applyViewMode() {
+            const treeView = document.getElementById('orgChartTree');
+            const gridView = document.getElementById('orgChartGrid');
+            const diagramView = document.getElementById('orgChartDiagram');
+
+            treeView.classList.toggle('hidden', viewMode !== 1);
+            gridView.classList.toggle('hidden', viewMode !== 2);
+            diagramView.classList.toggle('hidden', viewMode !== 0);
+
+            // Label + icon preview the NEXT mode the button will switch to
+            const next = viewOrder[(viewOrder.indexOf(viewMode) + 1) % viewOrder.length];
+            const viewIcon = document.getElementById('viewIcon');
+            const viewLabel = document.getElementById('viewLabel');
+            if (next === 0) {
+                viewIcon.className = 'fa-solid fa-diagram-project';
+                viewLabel.textContent = 'Traditional Chart';
+            } else if (next === 1) {
+                viewIcon.className = 'fa-solid fa-sitemap';
+                viewLabel.textContent = 'Hierarchy Chart';
+            } else {
+                viewIcon.className = 'fa-solid fa-grip';
+                viewLabel.textContent = 'Grid View';
+            }
+        }
+
         function attachCardEventListeners() {
             document.querySelectorAll('.card-inner').forEach(cardInner => {
                 cardInner.addEventListener('click', function(e) {
@@ -1009,6 +1356,19 @@
                     cSuiteSection.classList.remove('hidden');
                 }
             }
+
+            // Traditional Diagram: dim (instead of hide) non-matching nodes to preserve tree structure
+            document.querySelectorAll('.diagram-node').forEach(node => {
+                const cardDept = node.getAttribute('data-dept');
+                const cardSearch = node.getAttribute('data-search');
+                const matchesDept = (activeDepartment === 'all' || cardDept === activeDepartment);
+                const matchesSearch = !searchVal || cardSearch.includes(searchVal);
+                if (matchesDept && matchesSearch) {
+                    node.classList.remove('diagram-node-dimmed');
+                } else {
+                    node.classList.add('diagram-node-dimmed');
+                }
+            });
 
             // Toggle Empty State Box
             const emptyState = document.getElementById('emptyState');
@@ -1090,6 +1450,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderTreeLayout();
             renderGridLayout();
+            renderDiagramLayout();
+            applyViewMode();
 
             // Search input listener
             const searchInput = document.getElementById('searchInput');
@@ -1175,25 +1537,10 @@
                 });
             });
 
-            // Hierarchy View vs Grid View Toggle
+            // View Mode Toggle: cycles Traditional Diagram -> Hierarchy Tree -> Grid
             document.getElementById('viewToggleBtn').addEventListener('click', () => {
-                isTreeView = !isTreeView;
-                const treeView = document.getElementById('orgChartTree');
-                const gridView = document.getElementById('orgChartGrid');
-                const viewIcon = document.getElementById('viewIcon');
-                const viewLabel = document.getElementById('viewLabel');
-
-                if (isTreeView) {
-                    treeView.classList.remove('hidden');
-                    gridView.classList.add('hidden');
-                    viewIcon.className = 'fa-solid fa-sitemap';
-                    viewLabel.textContent = 'Hierarchy Chart';
-                } else {
-                    treeView.classList.add('hidden');
-                    gridView.classList.remove('hidden');
-                    viewIcon.className = 'fa-solid fa-grip';
-                    viewLabel.textContent = 'Grid View';
-                }
+                viewMode = viewOrder[(viewOrder.indexOf(viewMode) + 1) % viewOrder.length];
+                applyViewMode();
                 applyFilters();
             });
         });
