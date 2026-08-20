@@ -452,8 +452,7 @@
                 <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Top-down reporting structure with glowing connector branches &mdash; scaled to fit</p>
             </div>
 
-            <!-- Scaled canvas — auto-fits to viewport width, no scrolling needed -->
-            <div class="bg-brand-darkCard/60 border border-brand-darkBorder rounded-2xl p-8 relative overflow-hidden shadow-xl backdrop-blur-sm transition-colors duration-300">
+            <div class="relative mx-auto" id="orgDiagramOuter">
                 <div id="orgDiagramStage" class="relative mx-auto" style="transform-origin:top center; will-change:transform;">
                     <!-- Nodes + connectors injected via JavaScript -->
                 </div>
@@ -943,11 +942,10 @@
         function scaleDiagramContainer() {
             const stage = document.getElementById('orgDiagramStage');
             if (!stage) return;
-            const container = stage.parentElement;
+            const wrapper = document.getElementById('orgDiagramOuter');
             const stageW = parseFloat(stage.style.width) || stage.offsetWidth;
             const stageH = parseFloat(stage.style.height) || stage.offsetHeight;
-            const padX = 64;
-            const availW = Math.max(container.clientWidth - padX, 300);
+            const availW = Math.max((wrapper || stage.parentElement).clientWidth, 300);
             const scale = Math.min(1, availW / stageW);
             stage.style.transform = 'scale(' + scale + ')';
             stage.style.width  = stageW + 'px';
