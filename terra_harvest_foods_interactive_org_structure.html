@@ -449,12 +449,12 @@
                     <i class="fa-solid fa-diagram-project text-[#90CAF9]"></i> Traditional Hierarchy &bull; Node-Link Tree
                 </div>
                 <h3 class="text-xl font-extrabold text-white font-mono tier-title-text">EXECUTIVE COMMAND TREE</h3>
-                <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Top-down reporting structure with glowing connector branches &mdash; scroll sideways to view the full tree</p>
+                <p class="text-xs text-[#90CAF9] mt-1 font-mono tier-sub-text">Top-down reporting structure with glowing connector branches &mdash; scaled to fit</p>
             </div>
 
-            <!-- Scrollable canvas holding absolutely positioned nodes + SVG connectors -->
-            <div class="bg-brand-darkCard/60 border border-brand-darkBorder rounded-2xl p-8 relative overflow-x-auto shadow-xl backdrop-blur-sm transition-colors duration-300">
-                <div id="orgDiagramStage" class="relative mx-auto">
+            <!-- Scaled canvas — auto-fits to viewport width, no scrolling needed -->
+            <div class="bg-brand-darkCard/60 border border-brand-darkBorder rounded-2xl p-8 relative overflow-hidden shadow-xl backdrop-blur-sm transition-colors duration-300">
+                <div id="orgDiagramStage" class="relative mx-auto" style="transform-origin:top center; will-change:transform;">
                     <!-- Nodes + connectors injected via JavaScript -->
                 </div>
             </div>
@@ -937,6 +937,21 @@
                 </svg>
                 ${nodesHTML}
             `;
+            scaleDiagramContainer();
+        }
+
+        function scaleDiagramContainer() {
+            const stage = document.getElementById('orgDiagramStage');
+            if (!stage) return;
+            const container = stage.parentElement;
+            const stageW = parseFloat(stage.style.width) || stage.offsetWidth;
+            const stageH = parseFloat(stage.style.height) || stage.offsetHeight;
+            const padX = 64;
+            const availW = Math.max(container.clientWidth - padX, 300);
+            const scale = Math.min(1, availW / stageW);
+            stage.style.transform = 'scale(' + scale + ')';
+            stage.style.width  = stageW + 'px';
+            stage.style.height = stageH + 'px';
         }
 
         // ============ FOOD & BEVERAGE COMPANY ORG CHART (4TH VIEW) ============
@@ -1515,6 +1530,9 @@
             renderDiagramLayout();
             renderFoodLayout();
             applyViewMode();
+
+            // Re-scale diagram on window resize
+            window.addEventListener('resize', () => scaleDiagramContainer());
 
             // Search input listener
             const searchInput = document.getElementById('searchInput');
